@@ -1,26 +1,24 @@
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 
-import { User } from "@/common/entities/users.entity";
-import { CustomUserProfilesRepository } from "@/common/repositories/custom-user-profiles.repository";
 import { CustomUsersRepository } from "@/common/repositories/custom-users.repository";
 
+import { RegisterUserDto } from "./users.dtos";
 import { UsersRepository } from "./users.repository";
+import { UsersSerializer } from "./users.serializer";
 
 @Injectable()
 export class UsersService {
   constructor(
     private readonly customUserRepository: CustomUsersRepository,
     private readonly usersRepository: UsersRepository,
-    private readonly userProfileRepository: CustomUserProfilesRepository,
+    private readonly usersSerializer: UsersSerializer,
   ) {}
 
   async findByIdOrThrow(id: number, includePassword = false) {
     const user = await this.customUserRepository.findOneOrFail(id, {
       populate: ["userProfile", "userProfile.role"],
     });
-    return this.serialize(user, {
-      includePassword,
-    });
+    return this.usersSerializer.serializeUser(user, { includePassword });
   }
 
   async findByEmailOrThrow(email: string, includePassword = false) {
@@ -32,31 +30,19 @@ export class UsersService {
         populate: ["userProfile", "userProfile.role"],
       },
     );
-    return this.serialize(user, {
-      includePassword,
-    });
+    return this.usersSerializer.serializeUser(user, { includePassword });
   }
 
-  serialize(
-    user: User,
-    opts = {
-      includePassword: false,
-    },
-  ) {
-    const { includePassword } = opts;
+  async create(registerUserDto: RegisterUserDto) {
+    const existingUser = await this.customUserRepository.findOne({
+      email: registerUserDto.email,
+    });
 
-    const serializedUser: User = {
-      id: user.id,
-      email: user.email,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
-      userProfile: user.userProfile,
-    };
-
-    if (includePassword) {
-      serializedUser.password = user.password;
+    if (existingUser) {
+      throw new BadRequestException("User already exists");
     }
 
-    return serializedUser;
+    const newUser = await this.usersRepository.create(registerUserDto);
+    return this.usersSerializer.serializeUserProfile(newUser, { includePassword: false });
   }
 }

@@ -25,7 +25,7 @@ export class User extends BaseEntity {
   @Property({ unique: true })
   email!: string;
 
-  @Property({ nullable: true, hidden: true })
+  @Property({ nullable: true })
   password?: string | null;
 
   @OneToOne(() => UserProfile, { mappedBy: (userProfile) => userProfile.user })

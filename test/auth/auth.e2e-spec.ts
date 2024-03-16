@@ -160,7 +160,7 @@ describe("AuthController (e2e)", () => {
 
         await createUserInDb(dbService, {
           email,
-          roleName: EUserRole.ADMIN,
+          role: EUserRole.ADMIN,
         });
 
         const { body } = await request(authorizationHttpServer)
@@ -180,7 +180,7 @@ describe("AuthController (e2e)", () => {
 
         await createUserInDb(dbService, {
           email,
-          roleName: EUserRole.SUPER_USER,
+          role: EUserRole.SUPER_USER,
         });
 
         const { body } = await request(authorizationHttpServer)
@@ -202,7 +202,7 @@ describe("AuthController (e2e)", () => {
 
         await createUserInDb(dbService, {
           email,
-          roleName: EUserRole.ADMIN,
+          role: EUserRole.ADMIN,
         });
 
         const { body } = await request(authorizationHttpServer)
@@ -222,7 +222,7 @@ describe("AuthController (e2e)", () => {
 
         await createUserInDb(dbService, {
           email,
-          roleName: EUserRole.SUPER_USER,
+          role: EUserRole.SUPER_USER,
         });
 
         const { body } = await request(authorizationHttpServer)

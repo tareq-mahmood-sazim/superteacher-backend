@@ -2,10 +2,10 @@ import { Test, TestingModule } from "@nestjs/testing";
 
 import { AuthController } from "@/auth/auth.controller";
 import { AuthService } from "@/auth/auth.service";
-import { MOCK_USER } from "@/users/users.mocks";
 import { UsersService } from "@/users/users.service";
 
-import { MOCK_JWT_TOKEN, getMockLoginResponse } from "../auth.mocks";
+import { MOCK_JWT_TOKEN, getMockLoginResponse } from "./auth.mocks";
+import { MOCK_USER } from "./users.mocks";
 
 describe("AuthController", () => {
   let controller: AuthController;

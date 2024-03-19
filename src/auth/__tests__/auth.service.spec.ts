@@ -3,10 +3,10 @@ import { Test, TestingModule } from "@nestjs/testing";
 
 import { AuthService } from "@/auth/auth.service";
 import { RolesService } from "@/roles/roles.service";
-import { MOCK_USER } from "@/users/users.mocks";
 import { UsersService } from "@/users/users.service";
 
-import { MOCK_JWT_TOKEN, MOCK_USER_PASSWORD } from "../auth.mocks";
+import { MOCK_JWT_TOKEN, MOCK_USER_PASSWORD } from "./auth.mocks";
+import { MOCK_USER } from "./users.mocks";
 
 describe("AuthService", () => {
   let service: AuthService;

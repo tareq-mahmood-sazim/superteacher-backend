@@ -10,6 +10,7 @@ import ormConfig from "./db/db.config";
 import { FileUploadModule } from "./file-upload/file-upload.module";
 import { RolesModule } from "./roles/roles.module";
 import { UsersModule } from "./users/users.module";
+import { WebsocketExampleModule } from "./websocket-example/websocket-example.module";
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { UsersModule } from "./users/users.module";
     AuthModule,
     RolesModule,
     FileUploadModule,
+    WebsocketExampleModule,
   ],
   controllers: [],
   providers: [Logger],

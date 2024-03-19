@@ -20,7 +20,7 @@ export class AuthService {
   ) {}
 
   async validateUser(email: string, password: string) {
-    const user = await this.usersService.findByEmailOrThrow(email, true);
+    const user = await this.usersService.findByEmailOrThrow(email);
 
     const verified = await argon2.verify(user.password as string, password, ARGON2_OPTIONS);
     if (!verified) throw new UnauthorizedException(INVALID_USER_CREDENTIALS);

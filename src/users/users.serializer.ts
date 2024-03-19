@@ -1,43 +1,40 @@
 import { Injectable } from "@nestjs/common";
 
-import { serialize } from "@mikro-orm/core";
-
 import { UserProfile } from "@/common/entities/user-profiles.entity";
 import { User } from "@/common/entities/users.entity";
-
-import { TUserSerializationOptions } from "./users.types";
+import { AbstractBaseSerializer } from "@/common/serializers";
+import { TSerializationOptions } from "@/common/serializers/abstract-base-serializer.types";
 
 @Injectable()
-export class UsersSerializer {
-  defaultSerializationOptions: TUserSerializationOptions = {
-    includePassword: false,
-    includeRole: true,
+export class UsersSerializer extends AbstractBaseSerializer<User> {
+  protected serializeOneOptions: TSerializationOptions = {
+    skipNull: true,
+    forceObject: true,
+    exclude: ["password"],
+    populate: ["userProfile.role"],
   };
 
-  private patchSerializationOptions(serializationOptions: TUserSerializationOptions = {}) {
-    return {
-      ...this.defaultSerializationOptions,
-      ...serializationOptions,
-    };
-  }
+  protected serializeManyOptions: TSerializationOptions = {
+    skipNull: true,
+    forceObject: true,
+    exclude: ["password"],
+    populate: ["userProfile.role"],
+  };
+}
 
-  serializeUser(user: User, serializationOptions: TUserSerializationOptions) {
-    const options = this.patchSerializationOptions(serializationOptions);
+@Injectable()
+export class UserProfilesSerializer extends AbstractBaseSerializer<UserProfile> {
+  protected serializeOneOptions: TSerializationOptions = {
+    skipNull: true,
+    forceObject: true,
+    exclude: ["user.password"],
+    populate: ["role"],
+  };
 
-    return serialize(user, {
-      forceObject: true,
-      ...(options.includeRole ? { populate: ["userProfile", "userProfile.role"] } : {}),
-      ...(options.includePassword ? {} : { exclude: ["password"] }),
-    });
-  }
-
-  serializeUserProfile(userProfile: UserProfile, serializationOptions: TUserSerializationOptions) {
-    const options = this.patchSerializationOptions(serializationOptions);
-
-    return serialize(userProfile, {
-      forceObject: true,
-      ...(options.includeRole ? { populate: ["role"] } : {}),
-      ...(options.includePassword ? {} : { exclude: ["user.password"] }),
-    });
-  }
+  protected serializeManyOptions: TSerializationOptions = {
+    skipNull: true,
+    forceObject: true,
+    exclude: ["user.password"],
+    populate: ["role"],
+  };
 }

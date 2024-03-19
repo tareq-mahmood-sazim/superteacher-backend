@@ -1,9 +1,52 @@
 ## Installation
 
+Make sure you have `nvm` installed. Then, run the following commands:
+
+```bash
+$ nvm use
+```
+
+We use Node v20 by default.
+
 ```bash
 $ yarn install
 ```
+## Environment Variables
+For local development and testing, please create the following files at the root of the project directory:
 
+- `env.development.local`
+- `env.test.local`
+
+You can follow `env.example` to specify which env variables are needed for the project as a guideline, and the above two files can be created based off of this file.
+
+
+## Conventions
+
+### ORM
+We use Mikro ORM. Please go through [the docs](https://mikro-orm.io/docs/fundamentals) as this ORM has a slight learning curve. But it's the best Node ORM out there that we could find.
+
+### Separation of Concerns
+- There should be four layers of separation:
+    - Controller
+    - Service
+    - Repository
+    - Serializer
+
+### Entities
+- Mikro ORM entities go to the `common/entities` folder.
+- Each entity must extend from `BaseEntity` defined in `src/common/entities/base.entity.ts`
+
+### Repositories
+- Repositories extending from MikroORM's `EntityRepository` should be prefixed with `Custom`. They should be put in the `common` folder as they can be shared across the application. They support basic CRUD operations like `findOne` and `findAll`. See the `src/common/repositories` folder.
+- You can create your own repositories per module that make use of the custom repositories in the `common` folder and do stuff like `create`, `update` and `delete`.
+
+### Serialization
+- Please extend your serializer class from `AbstractBaseSerializer` and specify the serialization options. We use MikroORM's `serializer` function under the hood, as it works the best with MikroORM's entities. Read the docs for a better understanding on how Mikro's serialization works.
+
+### Tests
+- If you create any helper functions, please write unit tests for them.
+- E2E tests are mandatory.
+- Service and controller unit tests are optional but highly encouraged.
 
 ## Localstack
 
@@ -82,7 +125,10 @@ AWS_PROFILE=localstack_dev yarn run start:dev
 
 ```bash
 # Drop all tables, run all migrations, seed the db
-$ yarn run db:migration:fresh 
+$ yarn run db:migration:fresh:dev
+
+# Drop all tables, run all migrations, doesn't seed the db
+$ yarn run db:migration:fresh:test 
 
 # Migrate up to latest
 $ yarn run db:migration:up

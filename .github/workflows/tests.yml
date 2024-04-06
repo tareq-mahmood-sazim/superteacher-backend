@@ -1,0 +1,51 @@
+name: Tests
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  tests:
+    name: E2E and Unit Tests
+    runs-on: ubuntu-latest
+
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/project_test_db?schema=public
+      LOGGER_LOG_DIR: logs
+      LOGGER_NUM_MAX_LOG_FILES: 7
+      JWT_SECRET: secret
+      JWT_TOKEN_LIFETIME: 24h
+
+    services:
+      db:
+        image: postgres:14
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: project_test_db
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        id: setup-node
+        with:
+          cache: npm
+          node-version-file: ".nvmrc"
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Run database migrations
+        run: yarn db:migration:fresh:ci
+
+      - name: Run E2E tests
+        run: yarn test:e2e
+
+      - name: Run Unit tests
+        run: yarn test

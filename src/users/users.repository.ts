@@ -31,6 +31,6 @@ export class UsersRepository {
 
     await this.em.persistAndFlush([user, userProfile]);
 
-    return userProfile;
+    return user;
   }
 }

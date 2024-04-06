@@ -112,17 +112,23 @@ describe("UsersController (e2e)", () => {
         .expect((response) => {
           expect(response.body.data).toEqual({
             id: expect.any(Number),
+            email: newUserRegistrationDto.email,
             createdAt: expect.any(String),
             updatedAt: expect.any(String),
-            firstName: newUserRegistrationDto.profileInput.firstName,
-            lastName: newUserRegistrationDto.profileInput.lastName,
-            role: {
+            userProfile: {
               id: expect.any(Number),
               createdAt: expect.any(String),
               updatedAt: expect.any(String),
-              name: EUserRole.ADMIN,
+              firstName: newUserRegistrationDto.profileInput.firstName,
+              lastName: newUserRegistrationDto.profileInput.lastName,
+              email: newUserRegistrationDto.email,
+              role: {
+                id: expect.any(Number),
+                createdAt: expect.any(String),
+                updatedAt: expect.any(String),
+                name: EUserRole.ADMIN,
+              },
             },
-            email: newUserRegistrationDto.email,
           });
         });
     });

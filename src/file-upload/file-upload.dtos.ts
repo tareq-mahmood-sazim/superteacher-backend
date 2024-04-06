@@ -21,3 +21,7 @@ export class PresignedUrlFileDto {
   @Type(() => PresignedUrlFile)
   files!: PresignedUrlFile[];
 }
+
+export class PresignedUrlResponse extends PresignedUrlFile {
+  signedUrl!: string;
+}

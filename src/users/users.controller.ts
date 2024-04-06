@@ -8,7 +8,7 @@ import { RolesGuard } from "@/auth/guards/roles.guard";
 import { EUserRole } from "@/common/enums/roles.enums";
 import { ResponseTransformInterceptor } from "@/common/interceptors/response-transform.interceptor";
 
-import { RegisterUserDto } from "./users.dtos";
+import { RegisterUserDto, TokenizedUser, UserResponse } from "./users.dtos";
 import { UsersSerializer } from "./users.serializer";
 import { UsersService } from "./users.service";
 
@@ -22,14 +22,14 @@ export class UsersController {
   ) {}
 
   @Get("me")
-  me(@CurrentUser() user: ITokenizedUser) {
+  me(@CurrentUser() user: ITokenizedUser): TokenizedUser {
     return user;
   }
 
   @Post()
   @UseGuards(RolesGuard)
   @Roles(EUserRole.SUPER_USER)
-  async create(@Body() registerUserDto: RegisterUserDto) {
+  async create(@Body() registerUserDto: RegisterUserDto): Promise<UserResponse> {
     const newUser = await this.usersService.create(registerUserDto);
     return this.usersSerializer.serialize(newUser);
   }

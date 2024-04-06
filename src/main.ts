@@ -1,5 +1,6 @@
 import { ValidationPipe, VersioningType } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
+import { SwaggerModule, DocumentBuilder, SwaggerDocumentOptions } from "@nestjs/swagger";
 
 import { WinstonModule } from "nest-winston";
 
@@ -23,6 +24,19 @@ async function bootstrap() {
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
     allowedHeaders: "Content-Type, Accept, Authorization",
   });
+
+  const config = new DocumentBuilder()
+    .setTitle("Project API")
+    .setDescription("The BE API for Project")
+    .setVersion("1.0")
+    .build();
+  const options: SwaggerDocumentOptions = {
+    operationIdFactory: (controllerKey: string, methodKey: string) =>
+      controllerKey.replace("Controller", "") + methodKey,
+  };
+  const document = SwaggerModule.createDocument(app, config, options);
+  SwaggerModule.setup("swagger", app, document);
+
   await app.listen(3000);
 }
 bootstrap();

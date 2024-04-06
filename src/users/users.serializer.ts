@@ -1,12 +1,10 @@
 import { Injectable } from "@nestjs/common";
 
-import { UserProfile } from "@/common/entities/user-profiles.entity";
-import { User } from "@/common/entities/users.entity";
 import { AbstractBaseSerializer } from "@/common/serializers";
 import { TSerializationOptions } from "@/common/serializers/abstract-base-serializer.types";
 
 @Injectable()
-export class UsersSerializer extends AbstractBaseSerializer<User> {
+export class UsersSerializer extends AbstractBaseSerializer {
   protected serializeOneOptions: TSerializationOptions = {
     skipNull: true,
     forceObject: true,
@@ -23,7 +21,7 @@ export class UsersSerializer extends AbstractBaseSerializer<User> {
 }
 
 @Injectable()
-export class UserProfilesSerializer extends AbstractBaseSerializer<UserProfile> {
+export class UserProfilesSerializer extends AbstractBaseSerializer {
   protected serializeOneOptions: TSerializationOptions = {
     skipNull: true,
     forceObject: true,

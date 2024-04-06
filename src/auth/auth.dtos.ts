@@ -1,6 +1,6 @@
-import { ITokenizedUser } from "@/auth/auth.interfaces";
+import { TokenizedUser } from "@/users/users.dtos";
 
 export class LoginResponseDto {
   accessToken!: string;
-  user!: ITokenizedUser;
+  user!: TokenizedUser;
 }

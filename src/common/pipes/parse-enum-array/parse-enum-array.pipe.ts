@@ -12,6 +12,11 @@ export class ParseEnumArrayPipe<T> implements PipeTransform<string, T[] | undefi
     private readonly options: ParseEnumArrayOptions = { optional: false, separator: "," },
   ) {}
 
+  private split(value: string): string[] {
+    const decodedValue = decodeURIComponent(value);
+    return decodedValue.trim().split(this.options.separator);
+  }
+
   transform(value: string | undefined, _: ArgumentMetadata): T[] | undefined {
     if (this.options.optional && (value === undefined || value === "")) {
       return undefined;
@@ -21,7 +26,11 @@ export class ParseEnumArrayPipe<T> implements PipeTransform<string, T[] | undefi
       throw new BadRequestException("Validation failed: No value provided");
     }
 
-    const values = value.split(this.options.separator).map((item) => item.trim());
+    const values = this.split(value);
+
+    if (values.length === 0) {
+      throw new BadRequestException("Validation failed: No values provided");
+    }
 
     const enumValues = Object.values(this.enumType);
     const invalidValue = values.find((val) => !enumValues.includes(val as T));

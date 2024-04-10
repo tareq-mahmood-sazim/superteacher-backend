@@ -1,10 +1,7 @@
 import { BadRequestException } from "@nestjs/common";
 import { ArgumentMetadata } from "@nestjs/common/interfaces";
 
-import {
-  ParseEnumArrayOptions,
-  ParseEnumArrayPipe,
-} from "@/common/pipes/parse-enum-array/parse-enum-array.pipe";
+import { ParseEnumArrayOptions, ParseEnumArrayPipe } from "@/common/pipes/parse-enum-array";
 
 describe("ParseEnumArrayPipe", () => {
   enum ESomeEnum {
@@ -68,6 +65,15 @@ describe("ParseEnumArrayPipe", () => {
 
     it("should return an array of valid enum values", () => {
       const value = "value1,value2,value3";
+      const metadata: ArgumentMetadata = { type: "query", metatype: String, data: "" };
+
+      const result = pipe.transform(value, metadata);
+
+      expect(result).toEqual(["value1", "value2", "value3"]);
+    });
+
+    it("should return an array of valid enum values with encoded query params", () => {
+      const value = "value1%2Cvalue2%2Cvalue3";
       const metadata: ArgumentMetadata = { type: "query", metatype: String, data: "" };
 
       const result = pipe.transform(value, metadata);

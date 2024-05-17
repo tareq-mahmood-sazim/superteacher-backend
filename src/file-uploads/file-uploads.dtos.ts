@@ -1,7 +1,7 @@
 import { Type } from "class-transformer";
 import { ArrayMinSize, IsArray, IsIn, IsNotEmpty, IsString, ValidateNested } from "class-validator";
 
-import { allowedMimeTypes } from "./file-upload.constants";
+import { ALLOWED_MIME_TYPES } from "./file-uploads.constants";
 
 export class PresignedUrlFile {
   @IsString()
@@ -10,7 +10,7 @@ export class PresignedUrlFile {
 
   @IsString()
   @IsNotEmpty()
-  @IsIn(allowedMimeTypes)
+  @IsIn(ALLOWED_MIME_TYPES)
   type!: string;
 }
 

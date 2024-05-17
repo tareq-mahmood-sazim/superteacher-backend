@@ -7,7 +7,7 @@ import { AuthModule } from "./auth/auth.module";
 import { AppLoggerMiddleware } from "./common/middleware/request-logger.middleware";
 import { validate } from "./common/validators/env.validator";
 import ormConfig from "./db/db.config";
-import { FileUploadModule } from "./file-upload/file-upload.module";
+import { FileUploadsModule } from "./file-uploads/file-uploads.module";
 import { RolesModule } from "./roles/roles.module";
 import { UserProfilesModule } from "./user-profiles/user-profiles.module";
 import { UsersModule } from "./users/users.module";
@@ -26,7 +26,7 @@ import { WebsocketExampleModule } from "./websocket-example/websocket-example.mo
     UsersModule,
     AuthModule,
     RolesModule,
-    FileUploadModule,
+    FileUploadsModule,
     WebsocketExampleModule,
     UserProfilesModule,
   ],

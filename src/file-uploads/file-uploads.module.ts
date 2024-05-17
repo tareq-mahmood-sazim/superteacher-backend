@@ -6,13 +6,13 @@ import { S3, S3Client } from "@aws-sdk/client-s3";
 import { S3Service } from "@/common/aws/s3-service/s3-service";
 import { isLocal } from "@/utils/env";
 
-import { FileUploadController } from "./file-upload.controller";
-import { FileUploadService } from "./file-upload.service";
+import { FileUploadsController } from "./file-uploads.controller";
+import { FileUploadsService } from "./file-uploads.service";
 
 @Module({
-  controllers: [FileUploadController],
+  controllers: [FileUploadsController],
   providers: [
-    FileUploadService,
+    FileUploadsService,
     {
       provide: S3Service,
       useFactory: (config: ConfigService) => {
@@ -45,4 +45,4 @@ import { FileUploadService } from "./file-upload.service";
     },
   ],
 })
-export class FileUploadModule {}
+export class FileUploadsModule {}

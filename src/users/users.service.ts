@@ -4,18 +4,16 @@ import * as argon2 from "argon2";
 
 import { ARGON2_OPTIONS } from "@/common/config/argon2.config";
 import { EUserRole } from "@/common/enums/roles.enums";
-import { CustomRolesRepository } from "@/common/repositories/custom-roles.repository";
-import { CustomUsersRepository } from "@/common/repositories/custom-users.repository";
 
+import { RolesRepository } from "../roles/roles.repository";
 import { RegisterUserDto } from "./users.dtos";
 import { UsersRepository } from "./users.repository";
 
 @Injectable()
 export class UsersService {
   constructor(
-    private readonly customUserRepository: CustomUsersRepository,
     private readonly usersRepository: UsersRepository,
-    private readonly rolesRepository: CustomRolesRepository,
+    private readonly rolesRepository: RolesRepository,
   ) {}
 
   private hashPassword(password: string) {
@@ -23,14 +21,14 @@ export class UsersService {
   }
 
   async findByIdOrThrow(id: number) {
-    const user = await this.customUserRepository.findOneOrFail(id, {
+    const user = await this.usersRepository.findOneOrFail(id, {
       populate: ["userProfile", "userProfile.role"],
     });
     return user;
   }
 
   async findByEmailOrThrow(email: string) {
-    const user = await this.customUserRepository.findOneOrFail(
+    const user = await this.usersRepository.findOneOrFail(
       {
         email,
       },
@@ -42,7 +40,7 @@ export class UsersService {
   }
 
   async create(registerUserDto: RegisterUserDto, roleName = EUserRole.ADMIN) {
-    const existingUser = await this.customUserRepository.findOne({
+    const existingUser = await this.usersRepository.findOne({
       email: registerUserDto.email,
     });
 
@@ -52,7 +50,7 @@ export class UsersService {
 
     const role = await this.rolesRepository.findOneOrFail({ name: roleName });
 
-    const newUser = await this.usersRepository.create(
+    const newUser = await this.usersRepository.createUser(
       {
         ...registerUserDto,
         password: await this.hashPassword(registerUserDto.password),

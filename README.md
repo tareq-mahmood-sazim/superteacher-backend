@@ -34,14 +34,15 @@ We use Mikro ORM. Please go through [the docs](https://mikro-orm.io/docs/fundame
 
 ### Entities
 - Mikro ORM entities go to the `common/entities` folder.
-- Each entity must extend from `BaseEntity` defined in `src/common/entities/base.entity.ts`
+- Each entity must extend from `CustomBaseEntity` defined in `src/common/entities/custom-base.entity.ts`
 
 ### Repositories
-- Repositories extending from MikroORM's `EntityRepository` should be prefixed with `Custom`. They should be put in the `common` folder as they can be shared across the application. They support basic CRUD operations like `findOne` and `findAll`. See the `src/common/repositories` folder.
-- You can create your own repositories per module that make use of the custom repositories in the `common` folder and do stuff like `create`, `update` and `delete`.
+- Repositories should be subclasses of MikroORM's `EntityRepository` class. They should be put in the respective module folder (e.g. `UserRepository` in `users` module). They support basic CRUD operations like `findOne` and `findAll`. See the `src/users` folder.
+- **JS doesn't support method overloading.** If you need to create a method that has the same name as a method already in `EntityRepository` class, you can suffix the module name with the method. This is an exceptional case. Example is `createUser` method in `src/users/users.repository.ts`, since there was already a method called `create` in `EntityRepository` class.
 
 ### Serialization
 - Please extend your serializer class from `AbstractBaseSerializer` and specify the serialization options. We use MikroORM's `serializer` function under the hood, as it works the best with MikroORM's entities. Read the docs for a better understanding on how Mikro's serialization works.
+- If you need additional serialization logic beyond what's provided from `AbstractBaseSerializer`, create a method inside your custom serializer class.
 
 ### Tests
 - If you create any helper functions, please write unit tests for them.

@@ -1,23 +1,13 @@
-import { Injectable } from "@nestjs/common";
-
-import { wrap } from "@mikro-orm/core";
+import { EntityRepository, wrap } from "@mikro-orm/postgresql";
 
 import { Role } from "@/common/entities/roles.entity";
 import { UserProfile } from "@/common/entities/user-profiles.entity";
-import { User } from "@/common/entities/users.entity";
-import { CustomUserProfilesRepository } from "@/common/repositories/custom-user-profiles.repository";
 
+import { User } from "../common/entities/users.entity";
 import { RegisterUserDto } from "./users.dtos";
 
-@Injectable()
-export class UsersRepository {
-  private readonly em;
-
-  constructor(private readonly userProfileRepository: CustomUserProfilesRepository) {
-    this.em = this.userProfileRepository.getEntityManager();
-  }
-
-  async create(registerUserDto: RegisterUserDto, role: Role) {
+export class UsersRepository extends EntityRepository<User> {
+  async createUser(registerUserDto: RegisterUserDto, role: Role) {
     const {
       email,
       password,

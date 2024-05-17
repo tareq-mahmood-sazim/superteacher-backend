@@ -1,18 +1,18 @@
 import { Collection, Entity, Enum, ManyToMany, PrimaryKey } from "@mikro-orm/core";
 import { EntityRepositoryType } from "@mikro-orm/postgresql";
 
-import { BaseEntity } from "@/common/entities/base.entity";
-import { Permission } from "@/common/entities/permissions.entity";
 import { EUserRole } from "@/common/enums/roles.enums";
+import { RolesRepository } from "@/roles/roles.repository";
 
-import { CustomRolesRepository } from "../repositories/custom-roles.repository";
+import { CustomBaseEntity } from "./custom-base.entity";
+import { Permission } from "./permissions.entity";
 
 @Entity({
   tableName: "roles",
-  repository: () => CustomRolesRepository,
+  repository: () => RolesRepository,
 })
-export class Role extends BaseEntity {
-  [EntityRepositoryType]?: CustomRolesRepository;
+export class Role extends CustomBaseEntity {
+  [EntityRepositoryType]?: RolesRepository;
 
   constructor(name: EUserRole) {
     super();

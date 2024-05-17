@@ -1,14 +1,13 @@
 import { Collection, Entity, Enum, ManyToMany, PrimaryKey } from "@mikro-orm/core";
 
-import { BaseEntity } from "@/common/entities/base.entity";
-import { Role } from "@/common/entities/roles.entity";
-
 import { EPermission } from "../enums/roles.enums";
+import { CustomBaseEntity } from "./custom-base.entity";
+import { Role } from "./roles.entity";
 
 @Entity({
   tableName: "permissions",
 })
-export class Permission extends BaseEntity {
+export class Permission extends CustomBaseEntity {
   constructor(name: EPermission) {
     super();
     this.name = name;

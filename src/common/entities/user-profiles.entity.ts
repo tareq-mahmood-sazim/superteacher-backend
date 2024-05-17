@@ -10,18 +10,18 @@ import {
   EntityRepositoryType,
 } from "@mikro-orm/core";
 
-import { Role } from "@/common/entities/roles.entity";
-import { User } from "@/common/entities/users.entity";
+import { UserProfilesRepository } from "@/user-profiles/user-profiles.repository";
 
-import { CustomUserProfilesRepository } from "../repositories/custom-user-profiles.repository";
-import { BaseEntity } from "./base.entity";
+import { CustomBaseEntity } from "./custom-base.entity";
+import { Role } from "./roles.entity";
+import { User } from "./users.entity";
 
 @Entity({
   tableName: "user_profiles",
-  repository: () => CustomUserProfilesRepository,
+  repository: () => UserProfilesRepository,
 })
-export class UserProfile extends BaseEntity {
-  [EntityRepositoryType]?: CustomUserProfilesRepository;
+export class UserProfile extends CustomBaseEntity {
+  [EntityRepositoryType]?: UserProfilesRepository;
 
   constructor(firstName: string, lastName: string) {
     super();

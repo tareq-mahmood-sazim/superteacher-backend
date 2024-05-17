@@ -1,16 +1,16 @@
 import { Entity, EntityRepositoryType, OneToOne, PrimaryKey, Property, Rel } from "@mikro-orm/core";
 
-import { BaseEntity } from "@/common/entities/base.entity";
-import { UserProfile } from "@/common/entities/user-profiles.entity";
+import { UsersRepository } from "@/users/users.repository";
 
-import { CustomUsersRepository } from "../repositories/custom-users.repository";
+import { CustomBaseEntity } from "./custom-base.entity";
+import { UserProfile } from "./user-profiles.entity";
 
 @Entity({
   tableName: "users",
-  repository: () => CustomUsersRepository,
+  repository: () => UsersRepository,
 })
-export class User extends BaseEntity {
-  [EntityRepositoryType]?: CustomUsersRepository;
+export class User extends CustomBaseEntity {
+  [EntityRepositoryType]?: UsersRepository;
 
   constructor(email: string, password?: string) {
     super();

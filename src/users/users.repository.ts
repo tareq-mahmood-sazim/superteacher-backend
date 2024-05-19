@@ -1,12 +1,20 @@
-import { EntityRepository, wrap } from "@mikro-orm/postgresql";
+import { Injectable } from "@nestjs/common";
+
+import { EntityManager, EntityRepository, wrap } from "@mikro-orm/postgresql";
 
 import { Role } from "@/common/entities/roles.entity";
 import { UserProfile } from "@/common/entities/user-profiles.entity";
+import { RolesRepository } from "@/roles/roles.repository";
 
 import { User } from "../common/entities/users.entity";
 import { RegisterUserDto } from "./users.dtos";
 
+@Injectable()
 export class UsersRepository extends EntityRepository<User> {
+  constructor(em: EntityManager, private readonly rolesRepository: RolesRepository) {
+    super(em, User);
+  }
+
   async createUser(registerUserDto: RegisterUserDto, role: Role) {
     const {
       email,

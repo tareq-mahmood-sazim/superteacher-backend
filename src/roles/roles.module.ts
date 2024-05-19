@@ -1,14 +1,12 @@
 import { Module } from "@nestjs/common";
 
-import { MikroOrmModule } from "@mikro-orm/nestjs";
-
-import { Role } from "../common/entities/roles.entity";
+import { RolesRepository } from "./roles.repository";
 import { RolesService } from "./roles.service";
 
 @Module({
-  imports: [MikroOrmModule.forFeature([Role])],
+  imports: [],
   controllers: [],
-  providers: [RolesService],
-  exports: [RolesService, MikroOrmModule.forFeature([Role])],
+  providers: [RolesService, RolesRepository],
+  exports: [RolesService, RolesRepository],
 })
 export class RolesModule {}

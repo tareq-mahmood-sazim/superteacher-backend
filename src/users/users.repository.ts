@@ -1,21 +1,16 @@
 import { Injectable } from "@nestjs/common";
 
-import { EntityManager, EntityRepository, wrap } from "@mikro-orm/postgresql";
+import { EntityRepository } from "@mikro-orm/postgresql";
 
 import { Role } from "@/common/entities/roles.entity";
 import { UserProfile } from "@/common/entities/user-profiles.entity";
-import { RolesRepository } from "@/roles/roles.repository";
 
 import { User } from "../common/entities/users.entity";
 import { RegisterUserDto } from "./users.dtos";
 
 @Injectable()
 export class UsersRepository extends EntityRepository<User> {
-  constructor(em: EntityManager, private readonly rolesRepository: RolesRepository) {
-    super(em, User);
-  }
-
-  async createUser(registerUserDto: RegisterUserDto, role: Role) {
+  createOne(registerUserDto: RegisterUserDto, role: Role) {
     const {
       email,
       password,
@@ -25,9 +20,11 @@ export class UsersRepository extends EntityRepository<User> {
     const user = new User(email, password);
     const userProfile = new UserProfile(firstName, lastName);
 
-    wrap(userProfile).assign({ user, role });
+    userProfile.role = role;
+    user.userProfile = userProfile;
+    userProfile.user = user;
 
-    await this.em.persistAndFlush([user, userProfile]);
+    this.em.persist([user, userProfile]);
 
     return user;
   }

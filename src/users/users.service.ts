@@ -1,5 +1,7 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
 
+import { EntityManager } from "@mikro-orm/core";
+
 import * as argon2 from "argon2";
 
 import { ARGON2_OPTIONS } from "@/common/config/argon2.config";
@@ -12,6 +14,7 @@ import { UsersRepository } from "./users.repository";
 @Injectable()
 export class UsersService {
   constructor(
+    private readonly entityManager: EntityManager,
     private readonly usersRepository: UsersRepository,
     private readonly rolesRepository: RolesRepository,
   ) {}
@@ -39,7 +42,7 @@ export class UsersService {
     return user;
   }
 
-  async create(registerUserDto: RegisterUserDto, roleName = EUserRole.ADMIN) {
+  async createOne(registerUserDto: RegisterUserDto, roleName = EUserRole.ADMIN) {
     const existingUser = await this.usersRepository.findOne({
       email: registerUserDto.email,
     });
@@ -50,13 +53,15 @@ export class UsersService {
 
     const role = await this.rolesRepository.findOneOrFail({ name: roleName });
 
-    const newUser = await this.usersRepository.createUser(
+    const newUser = this.usersRepository.createOne(
       {
         ...registerUserDto,
         password: await this.hashPassword(registerUserDto.password),
       },
       role,
     );
+
+    await this.entityManager.flush();
 
     return newUser;
   }

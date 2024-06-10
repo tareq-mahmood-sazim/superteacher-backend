@@ -29,8 +29,8 @@ export class UsersController {
   @Post()
   @UseGuards(RolesGuard)
   @Roles(EUserRole.SUPER_USER)
-  async create(@Body() registerUserDto: RegisterUserDto): Promise<UserResponse> {
-    const newUser = await this.usersService.create(registerUserDto);
+  async createUser(@Body() registerUserDto: RegisterUserDto): Promise<UserResponse> {
+    const newUser = await this.usersService.createOne(registerUserDto);
     return this.usersSerializer.serialize(newUser);
   }
 }

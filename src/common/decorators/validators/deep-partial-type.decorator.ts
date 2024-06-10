@@ -11,7 +11,7 @@ import { RemoveFieldsWithType } from "@nestjs/mapped-types/dist/types/remove-fie
 
 import { Type as CTType } from "class-transformer";
 
-import { DeepPartial } from "../types/deep-partial.type";
+import { DeepPartial } from "../../types/deep-partial.type";
 
 export function DeepPartialType<T>(classRef: Type<T>) {
   abstract class DeepPartialClassType {

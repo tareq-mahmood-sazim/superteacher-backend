@@ -1,13 +1,16 @@
 import { Module } from "@nestjs/common";
 
-import { UserProfilesRepository } from "./user-profiles.repository";
+import { MikroOrmModule } from "@mikro-orm/nestjs";
+
+import { UserProfile } from "@/common/entities/user-profiles.entity";
+
 import { UserProfilesSerializer } from "./user-profiles.serializer";
 import { UserProfilesService } from "./user-profiles.service";
 
 @Module({
-  imports: [],
+  imports: [MikroOrmModule.forFeature([UserProfile])],
   controllers: [],
-  providers: [UserProfilesService, UserProfilesRepository, UserProfilesSerializer],
-  exports: [UserProfilesService, UserProfilesRepository, UserProfilesSerializer],
+  providers: [UserProfilesService, UserProfilesSerializer],
+  exports: [UserProfilesService, UserProfilesSerializer, MikroOrmModule.forFeature([UserProfile])],
 })
 export class UserProfilesModule {}

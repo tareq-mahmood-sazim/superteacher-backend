@@ -22,32 +22,7 @@ You can follow `env.example` to specify which env variables are needed for the p
 
 ## Conventions
 
-### ORM
-We use Mikro ORM. Please go through [the docs](https://mikro-orm.io/docs/fundamentals) as this ORM has a slight learning curve. But it's the best Node ORM out there that we could find.
-
-### Separation of Concerns
-- There should be four layers of separation:
-    - Controller
-    - Service
-    - Repository
-    - Serializer
-
-### Entities
-- Mikro ORM entities go to the `common/entities` folder.
-- Each entity must extend from `CustomBaseEntity` defined in `src/common/entities/custom-base.entity.ts`
-
-### Repositories
-- Repositories should be subclasses of MikroORM's `EntityRepository` class. They should be put in the respective module folder (e.g. `UserRepository` in `users` module). They support basic CRUD operations like `findOne` and `findAll`. See the `src/users` folder.
-- **JS doesn't support method overloading.** If you need to create a method that has the same name as a method already in `EntityRepository` class, you can suffix the module name with the method. This is an exceptional case. Example is `createUser` method in `src/users/users.repository.ts`, since there was already a method called `create` in `EntityRepository` class.
-
-### Serialization
-- Please extend your serializer class from `AbstractBaseSerializer` and specify the serialization options. We use MikroORM's `serializer` function under the hood, as it works the best with MikroORM's entities. Read the docs for a better understanding on how Mikro's serialization works.
-- If you need additional serialization logic beyond what's provided from `AbstractBaseSerializer`, create a method inside your custom serializer class.
-
-### Tests
-- If you create any helper functions, please write unit tests for them.
-- E2E tests are mandatory.
-- Service and controller unit tests are optional but highly encouraged.
+Follow our [NestJS Conventions Doc](https://docs.google.com/document/d/1fBH7IJOy8ugQIxN64gHjv50Mn1cj2ZiqOYm4niP_WQU/edit) for guidelines
 
 ## Localstack
 

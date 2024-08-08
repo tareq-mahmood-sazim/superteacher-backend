@@ -43,6 +43,8 @@ async function bootstrap() {
     SwaggerModule.setup("swagger", app, document);
   }
 
+  app.enableShutdownHooks();
+
   await app.listen(process.env.BE_PORT);
 }
 bootstrap();

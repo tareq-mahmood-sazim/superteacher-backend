@@ -13,6 +13,7 @@ jobs:
       DATABASE_URL: postgresql://postgres:postgres@localhost:5432/project_test_db?schema=public
       BE_PORT: 5000
       BE_WS_PORT: 5001
+      API_HEALTH_URL: http://localhost:5000/api/v1/health
       JWT_SECRET: secret
       JWT_TOKEN_LIFETIME: 24h
       AWS_S3_REGION: us-east-1

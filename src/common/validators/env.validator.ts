@@ -14,6 +14,9 @@ class EnvironmentVariables implements IEnvironmentVariables {
   BE_WS_PORT!: string;
 
   @IsString()
+  API_HEALTH_URL!: string;
+
+  @IsString()
   DATABASE_URL!: string;
 
   @IsString()

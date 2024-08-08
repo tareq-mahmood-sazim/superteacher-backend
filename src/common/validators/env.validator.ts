@@ -1,5 +1,5 @@
 import { plainToInstance } from "class-transformer";
-import { IsNumber, IsString, validateSync } from "class-validator";
+import { IsString, validateSync } from "class-validator";
 
 import { IEnvironmentVariables } from "../interfaces/environment-variables.interface";
 
@@ -8,19 +8,31 @@ class EnvironmentVariables implements IEnvironmentVariables {
   NODE_ENV!: string;
 
   @IsString()
-  DATABASE_URL!: string;
+  BE_PORT!: string;
 
   @IsString()
-  LOGGER_LOG_DIR!: string;
+  BE_WS_PORT!: string;
 
-  @IsNumber()
-  LOGGER_NUM_MAX_LOG_FILES!: number;
+  @IsString()
+  DATABASE_URL!: string;
 
   @IsString()
   JWT_SECRET!: string;
 
   @IsString()
   JWT_TOKEN_LIFETIME!: string;
+
+  @IsString()
+  AWS_S3_REGION!: string;
+
+  @IsString()
+  AWS_S3_ENDPOINT!: string;
+
+  @IsString()
+  AWS_S3_BUCKET_NAME!: string;
+
+  @IsString()
+  AWS_S3_PRESIGN_URL_EXPIRY_IN_MINUTES!: string;
 }
 
 export function validate(config: Record<string, unknown>) {

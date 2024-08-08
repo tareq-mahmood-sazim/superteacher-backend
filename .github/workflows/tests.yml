@@ -11,10 +11,14 @@ jobs:
 
     env:
       DATABASE_URL: postgresql://postgres:postgres@localhost:5432/project_test_db?schema=public
-      LOGGER_LOG_DIR: logs
-      LOGGER_NUM_MAX_LOG_FILES: 7
+      BE_PORT: 5000
+      BE_WS_PORT: 5001
       JWT_SECRET: secret
       JWT_TOKEN_LIFETIME: 24h
+      AWS_S3_REGION: us-east-1
+      AWS_S3_ENDPOINT: http://localhost:4566
+      AWS_S3_BUCKET_NAME: project-dev-bucket
+      AWS_S3_PRESIGN_URL_EXPIRY_IN_MINUTES: 5
 
     services:
       db:

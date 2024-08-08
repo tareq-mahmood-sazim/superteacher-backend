@@ -14,15 +14,17 @@ import { MikroOrmModule } from "@mikro-orm/nestjs";
 import { faker } from "@faker-js/faker";
 import request from "supertest";
 
-import { AppModule } from "@/app.module";
+import { AuthModule } from "@/auth/auth.module";
 import { Permissions } from "@/auth/decorators/permissions.decorator";
 import { Roles } from "@/auth/decorators/roles.decorator";
 import { JwtAuthGuard } from "@/auth/guards/jwt-auth.guard";
 import { PermissionsGuard } from "@/auth/guards/permissions.guard";
 import { RolesGuard } from "@/auth/guards/roles.guard";
-import { Role } from "@/common/entities/roles.entity";
 import { EPermission, EUserRole } from "@/common/enums/roles.enums";
+import ormConfig from "@/db/db.config";
+import { RolesModule } from "@/roles/roles.module";
 import { RolesService } from "@/roles/roles.service";
+import { UsersModule } from "@/users/users.module";
 
 import { bootstrapTestServer } from "../utils/bootstrap";
 import { truncateTables } from "../utils/db";
@@ -113,7 +115,7 @@ describe("AuthController (e2e)", () => {
       }
 
       const moduleFixture: TestingModule = await Test.createTestingModule({
-        imports: [AppModule, MikroOrmModule.forFeature([Role])],
+        imports: [MikroOrmModule.forRoot(ormConfig), UsersModule, AuthModule, RolesModule],
         controllers: [DummyController],
         providers: [RolesService],
       }).compile();

@@ -33,7 +33,7 @@ describe("Websocket Example Gateway (E2E", () => {
     path: "/ws-example",
     transports: ["websocket"],
   };
-  const defaultSocketUrl = "ws://localhost:3000";
+  const defaultSocketUrl = `ws://localhost:${process.env.BE_WS_PORT}`;
 
   beforeAll(async () => {
     const { appInstance, dbServiceInstance, httpServerInstance, ormInstance } =

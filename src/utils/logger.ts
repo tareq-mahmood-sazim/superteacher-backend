@@ -1,36 +1,44 @@
+import { trace, context } from "@opentelemetry/api";
 import { existsSync, mkdirSync } from "fs";
 import { join } from "path";
 import * as winston from "winston";
 import "winston-daily-rotate-file";
 
 function createLogDirectory() {
-  const logDir = join(process.cwd(), process.env.LOGGER_LOG_DIR || "logs");
+  const logDir = join(process.cwd(), "logs");
   if (!existsSync(logDir)) {
     mkdirSync(logDir);
   }
   return logDir;
 }
 
+const addTraceId = winston.format((info) => {
+  const spanContext = trace.getSpan(context.active())?.spanContext();
+  info.traceId = spanContext?.traceId;
+  return info;
+});
+
 function getLogFormat() {
   const logFormat = winston.format.printf(
-    ({ timestamp, level, message, context }) =>
-      `${new Date(timestamp).toLocaleString()} [${level}] ${context ? `[${context}]` : ""} ${
-        typeof message === "object" ? JSON.stringify(message) : message
-      }`,
+    ({ timestamp, level, message, context, traceId }) =>
+      `${new Date(timestamp).toLocaleString()} [${level}] ${traceId ? `[Trace: ${traceId}]` : ""} ${
+        context ? `[${context}]` : ""
+      } ${typeof message === "object" ? JSON.stringify(message) : message}`,
   );
   return logFormat;
 }
 
 export default function getWinstonLoggerTransports() {
-  const maxLogFiles = process.env.LOGGER_NUM_MAX_LOG_FILES;
+  const maxLogFiles = 7;
   const logDir = createLogDirectory();
   const logFormat = getLogFormat();
 
   const format = winston.format.combine(
+    addTraceId(),
     winston.format.errors({ stack: true }),
     winston.format.timestamp(),
     winston.format.splat(),
-    winston.format.colorize(),
+    winston.format.colorize({ all: true }),
     logFormat,
   );
 

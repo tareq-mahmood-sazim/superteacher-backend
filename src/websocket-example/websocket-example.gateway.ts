@@ -2,16 +2,15 @@ import { UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { MessageBody, SubscribeMessage, WebSocketGateway } from "@nestjs/websockets";
 
+import { getCorsConfig } from "@/common/config/cors.config";
 import extractBearerAuthTokenFromHeaders from "@/common/middleware/bearer-token-validator.middleware";
 import { AbstractWebsocketGateway } from "@/common/websockets/abstract-websocket.gateway";
 import { TSocket } from "@/common/websockets/abstract-websocket.types";
 
 import { EGatewayIncomingEvent, EGatewayOutgoingEvent } from "./websocket-example.enum";
 
-@WebSocketGateway({
-  cors: {
-    origin: "*",
-  },
+@WebSocketGateway(Number.parseInt(process.env.BE_WS_PORT!), {
+  cors: getCorsConfig(),
   path: "/ws-example",
   transports: ["websocket"],
 })

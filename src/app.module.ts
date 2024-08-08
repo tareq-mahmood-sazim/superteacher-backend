@@ -3,6 +3,8 @@ import { ConfigModule } from "@nestjs/config";
 
 import { MikroOrmModule } from "@mikro-orm/nestjs";
 
+import { OpenTelemetryModule } from "@metinseylan/nestjs-opentelemetry";
+
 import { AuthModule } from "./auth/auth.module";
 import { AppLoggerMiddleware } from "./common/middleware/request-logger.middleware";
 import { validate } from "./common/validators/env.validator";
@@ -21,6 +23,10 @@ import { WebsocketExampleModule } from "./websocket-example/websocket-example.mo
       ignoreEnvFile: false,
       isGlobal: true,
       validate,
+    }),
+
+    OpenTelemetryModule.forRoot({
+      serviceName: "Project Backend",
     }),
 
     UsersModule,

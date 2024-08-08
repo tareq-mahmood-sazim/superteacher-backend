@@ -7,6 +7,7 @@ import { Migrator, TSMigrationGenerator } from "@mikro-orm/migrations";
 import { defineConfig } from "@mikro-orm/postgresql";
 import { SeedManager } from "@mikro-orm/seeder";
 
+import * as fs from "fs";
 import * as path from "path";
 
 const ormConfig = defineConfig({
@@ -23,13 +24,31 @@ const ormConfig = defineConfig({
   strict: true,
   debug: true,
 
+  ...(process.env.NODE_ENV === "production"
+    ? {
+        driverOptions: {
+          connection: {
+            ssl: {
+              ca: fs
+                .readFileSync(path.resolve(process.cwd(), "certs/db-ca-certificate.crt"))
+                .toString(),
+            },
+          },
+        },
+      }
+    : {}),
+
+  schemaGenerator: {
+    disableForeignKeys: false,
+  },
+
   migrations: {
     tableName: "mikro_orm_migrations",
     path: "./dist/db/migrations",
     pathTs: "./src/db/migrations",
     glob: "!(*.d).{js,ts}",
     transactional: true,
-    disableForeignKeys: true,
+    disableForeignKeys: false,
     allOrNothing: true,
     dropTables: true,
     safe: false,
@@ -48,7 +67,6 @@ const ormConfig = defineConfig({
   seeder: {
     path: "./dist/db/seeders",
     pathTs: "./src/db/seeders",
-    defaultSeeder: "DatabaseSeeder",
     glob: "!(*.d).{js,ts}",
     emit: "js",
     fileName: (className: string) => className,

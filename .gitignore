@@ -41,3 +41,4 @@ lerna-debug.log*
 !.env.example
 volume
 .snapshot.json
+certs

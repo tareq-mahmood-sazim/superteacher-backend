@@ -100,7 +100,7 @@ AWS_PROFILE=localstack_dev yarn run start:dev
 ## Database Migrations
 
 ```bash
-# Drop all tables, run all migrations, seed the db
+# Drop all tables, run all migrations, seed the db with the specified seeder class in the script
 $ yarn run db:migration:fresh:dev
 
 # Drop all tables, run all migrations, doesn't seed the db
@@ -116,7 +116,8 @@ $ yarn run db:migration:down
 $ yarn run db:migration:create
 
 # Seed database with dev variables and DatabaseSeeder
-$ yarn run db:seed:dev
+For seeding, we need to pass in the name of the seeder class. This is not supported by `yarn`, so we use `npm`
+$ npm run db:seed:dev -- -c "DevDatabaseSeeder"
 
 # Run all migrations and seeding with test variables
 $ yarn run db:migration:test

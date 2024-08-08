@@ -9,7 +9,7 @@ import { UserProfile } from "@/common/entities/user-profiles.entity";
 import { User } from "@/common/entities/users.entity";
 import { EUserRole } from "@/common/enums/roles.enums";
 
-export class DatabaseSeeder extends Seeder {
+export class DevDatabaseSeeder extends Seeder {
   async run(em: EntityManager): Promise<void> {
     this.createRoles(em);
     await this.createTestUser(em);

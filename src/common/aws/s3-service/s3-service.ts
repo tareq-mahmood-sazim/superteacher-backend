@@ -47,9 +47,9 @@ export class S3Service {
       ContentType: type,
       ACL: "public-read",
     });
-    const expiryInMinutes = Number.parseInt(
-      process.env.AWS_S3_PRESIGN_URL_EXPIRY_IN_MINUTES || "5",
-    );
+    const expiryInMinutes = this.config.get<number>("AWS_S3_PRESIGN_URL_EXPIRY_IN_MINUTES", {
+      infer: true,
+    })!;
     return getSignedUrl(this.s3Client, command, { expiresIn: expiryInMinutes * 60 });
   }
 }

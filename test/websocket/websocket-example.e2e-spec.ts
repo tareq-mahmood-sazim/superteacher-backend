@@ -51,7 +51,7 @@ describe("Websocket Example Gateway (E2E", () => {
 
     token = await getAccessToken(httpServer, testUserEmail, testUserPassword);
 
-    await appInstance.listen(3000);
+    await appInstance.listen(5000);
   });
 
   afterAll(async () => {

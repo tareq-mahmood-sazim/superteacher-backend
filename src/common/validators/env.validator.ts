@@ -1,5 +1,5 @@
 import { plainToInstance } from "class-transformer";
-import { IsString, validateSync } from "class-validator";
+import { IsNumber, IsPositive, IsString, validateSync } from "class-validator";
 
 import { IEnvironmentVariables } from "../interfaces/environment-variables.interface";
 
@@ -7,11 +7,13 @@ class EnvironmentVariables implements IEnvironmentVariables {
   @IsString()
   NODE_ENV!: string;
 
-  @IsString()
-  BE_PORT!: string;
+  @IsNumber()
+  @IsPositive()
+  BE_PORT!: number;
 
-  @IsString()
-  BE_WS_PORT!: string;
+  @IsNumber()
+  @IsPositive()
+  BE_WS_PORT!: number;
 
   @IsString()
   API_HEALTH_URL!: string;
@@ -34,8 +36,9 @@ class EnvironmentVariables implements IEnvironmentVariables {
   @IsString()
   AWS_S3_BUCKET_NAME!: string;
 
-  @IsString()
-  AWS_S3_PRESIGN_URL_EXPIRY_IN_MINUTES!: string;
+  @IsNumber()
+  @IsPositive()
+  AWS_S3_PRESIGN_URL_EXPIRY_IN_MINUTES!: number;
 }
 
 export function validate(config: Record<string, unknown>) {

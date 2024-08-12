@@ -9,7 +9,7 @@ import { TSocket } from "@/common/websockets/abstract-websocket.types";
 
 import { EGatewayIncomingEvent, EGatewayOutgoingEvent } from "./websocket-example.enum";
 
-@WebSocketGateway(Number.parseInt(process.env.BE_WS_PORT!), {
+@WebSocketGateway(Number(process.env.BE_WS_PORT), {
   cors: getCorsConfig(),
   path: "/ws-example",
   transports: ["websocket"],

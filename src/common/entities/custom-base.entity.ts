@@ -1,3 +1,4 @@
+// not required anymore
 import { Entity, OptionalProps, Property } from "@mikro-orm/core";
 
 @Entity({ abstract: true })

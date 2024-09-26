@@ -1,48 +1,36 @@
-import {
-  Entity,
-  PrimaryKey,
-  Property,
-  OneToMany,
-  ManyToMany,
-  Collection,
-  Enum,
-} from "@mikro-orm/core";
-
-import { v4 } from "uuid";
+import { Entity, Property, OneToMany, ManyToMany, Collection, Enum } from "@mikro-orm/core";
 
 import { Assignment } from "./assignment.entity";
 import { Attachment } from "./attachment.entity";
 import { Classroom } from "./classroom.entity";
-import { EducationLevel } from "./main.enum";
+import { Details } from "./details.entity";
+import { Degree, Gender } from "./main.enum";
 import { Message } from "./message.entity";
 
 @Entity({
   tableName: "teacher",
 })
-export class Teacher {
-  @PrimaryKey({ type: "uuid" })
-  id: string = v4();
-
-  @Property({ unique: true })
-  uniqueCode!: string;
-
-  @Property()
+export class Teacher extends Details {
+  @Property({ type: "string" })
   firstName!: string;
 
-  @Property()
+  @Property({ type: "string" })
   lastName!: string;
 
-  @Property({ unique: true })
+  @Property({ type: "string", unique: true })
   email!: string;
 
-  @Enum(() => EducationLevel)
-  highestEducationLevel!: EducationLevel;
+  @Enum(() => Degree)
+  highestEducationLevel!: Degree;
 
-  @Property()
+  @Property({ type: "string" })
   majorSubject!: string;
 
-  @Property()
-  subjectToTeach!: string;
+  @Property({ type: "json" })
+  subjectsToTeach!: string[];
+
+  @Enum(() => Gender)
+  gender!: Gender;
 
   @ManyToMany(() => Classroom, (classroom) => classroom.teachers)
   classrooms = new Collection<Classroom>(this);

@@ -6,7 +6,7 @@ import { Assignment } from "./assignment.entity";
 import { Student } from "./student.entity";
 
 @Entity({
-  tableName: "assignmentSubmission"
+  tableName: "assignmentSubmission",
 })
 export class AssignmentSubmission {
   @PrimaryKey({ type: "uuid" })

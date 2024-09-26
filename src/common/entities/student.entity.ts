@@ -1,28 +1,15 @@
-import {
-  Entity,
-  PrimaryKey,
-  Property,
-  OneToMany,
-  ManyToMany,
-  Collection,
-  Enum,
-} from "@mikro-orm/core";
-
-import { v4 } from "uuid";
+import { Entity, Property, OneToMany, ManyToMany, Collection, Enum } from "@mikro-orm/core";
 
 import { AssignmentSubmission } from "./assignment-submission.entity";
 import { Classroom } from "./classroom.entity";
+import { Details } from "./details.entity";
 import { Gender, EducationLevel, Medium, Degree } from "./main.enum";
 import { Message } from "./message.entity";
 
 @Entity({
   tableName: "student",
-
 })
-export class Student {
-  @PrimaryKey({ type: "uuid" })
-  id: string = v4();
-
+export class Student extends Details {
   @Property()
   firstName!: string;
 
@@ -47,16 +34,13 @@ export class Student {
   @Property()
   password!: string;
 
-  @Property()
-  confirmPassword!: string;
-
   @Enum(() => Medium)
   medium?: Medium;
 
   @Property({ nullable: true })
   classLevel?: string;
 
-  @Enum(() => Degree)
+  @Enum({ items: ["BACHELORS", "MASTERS", "null"] })
   degree?: Degree;
 
   @Property({ nullable: true })

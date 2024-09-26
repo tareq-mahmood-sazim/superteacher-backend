@@ -3,7 +3,7 @@ import { Entity, PrimaryKey, ManyToOne, Unique } from "@mikro-orm/core";
 import { Classroom } from "./classroom.entity";
 import { Student } from "./student.entity";
 @Entity({
-  tableName: "classroomStudent"
+  tableName: "classroomStudent",
 })
 @Unique({ properties: ["classroom", "student"] })
 export class ClassroomStudent {

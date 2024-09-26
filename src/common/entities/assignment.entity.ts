@@ -1,26 +1,14 @@
-import {
-  Entity,
-  PrimaryKey,
-  Property,
-  ManyToOne,
-  OneToMany,
-  Collection,
-  Index,
-} from "@mikro-orm/core";
-
-import { v4 } from "uuid";
+import { Entity, Property, ManyToOne, OneToMany, Collection, Index } from "@mikro-orm/core";
 
 import { AssignmentSubmission } from "./assignment-submission.entity";
 import { Classroom } from "./classroom.entity";
+import { Details } from "./details.entity";
 import { Teacher } from "./teacher.entity";
 @Entity({
   tableName: "assignment",
 })
 @Index({ properties: ["classroom"] })
-export class Assignment {
-  @PrimaryKey({ type: "uuid" })
-  id: string = v4();
-
+export class Assignment extends Details {
   @Property()
   title!: string;
 

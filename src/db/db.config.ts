@@ -16,8 +16,7 @@ const ormConfig = defineConfig({
 
   metadataProvider: ReflectMetadataProvider,
 
-  clientUrl: process.env.DATABASE_URL,
-
+  clientUrl: "postgresql://postgres:postgres@localhost:5432/project_dev_db?schema=public",
   extensions: [Migrator, SeedManager],
 
   validate: true,

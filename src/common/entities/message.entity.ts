@@ -8,7 +8,7 @@ import { Student } from "./student.entity";
 import { Teacher } from "./teacher.entity";
 
 @Entity({
-  tableName: "message"
+  tableName: "message",
 })
 @Index({ properties: ["classroom"] })
 @Index({ properties: ["senderId"] })

@@ -8,7 +8,7 @@ import { Message } from "./message.entity";
 import { Student } from "./student.entity";
 import { Teacher } from "./teacher.entity";
 @Entity({
-  tableName: "classroom"
+  tableName: "classroom",
 })
 export class Classroom {
   @PrimaryKey({ type: "uuid" })

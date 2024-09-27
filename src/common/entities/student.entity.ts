@@ -17,7 +17,6 @@ import { Message } from "./message.entity";
 
 @Entity({
   tableName: "student",
-
 })
 export class Student {
   @PrimaryKey({ type: "uuid" })

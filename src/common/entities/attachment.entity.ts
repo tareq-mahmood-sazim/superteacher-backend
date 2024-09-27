@@ -5,7 +5,7 @@ import { v4 } from "uuid";
 import { Classroom } from "./classroom.entity";
 import { Teacher } from "./teacher.entity";
 @Entity({
-  tableName: "attachment"
+  tableName: "attachment",
 })
 @Index({ properties: ["classroom"] })
 @Index({ properties: ["teacher"] })

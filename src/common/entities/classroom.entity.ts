@@ -1,19 +1,15 @@
-import { Entity, PrimaryKey, Property, OneToMany, ManyToMany, Collection } from "@mikro-orm/core";
-
-import { v4 } from "uuid";
+import { Entity, Property, OneToMany, ManyToMany, Collection } from "@mikro-orm/core";
 
 import { Assignment } from "./assignment.entity";
 import { Attachment } from "./attachment.entity";
+import { Details } from "./details.entity";
 import { Message } from "./message.entity";
-import { Student } from "./student.entity";
-import { Teacher } from "./teacher.entity";
+import { UserProfile } from "./user-profiles.entity";
+
 @Entity({
   tableName: "classroom",
 })
-export class Classroom {
-  @PrimaryKey({ type: "uuid" })
-  id: string = v4();
-
+export class Classroom extends Details {
   @Property()
   title!: string;
 
@@ -26,12 +22,8 @@ export class Classroom {
   @Property()
   days!: string;
 
-  // Owning side of the relationship
-  @ManyToMany(() => Student, (student) => student.classrooms, { owner: true })
-  students = new Collection<Student>(this);
-
-  @ManyToMany(() => Teacher, (teacher) => teacher.classrooms, { owner: true })
-  teachers = new Collection<Teacher>(this);
+  @ManyToMany(() => UserProfile, (userProfile) => userProfile.classrooms, { owner: true })
+  participants = new Collection<UserProfile>(this);
 
   @OneToMany(() => Message, (message) => message.classroom)
   messages = new Collection<Message>(this);

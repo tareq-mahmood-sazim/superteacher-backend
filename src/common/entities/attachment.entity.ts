@@ -1,18 +1,15 @@
-import { Entity, PrimaryKey, Property, ManyToOne, Index } from "@mikro-orm/core";
-
-import { v4 } from "uuid";
+import { Entity, Property, ManyToOne, Index } from "@mikro-orm/core";
 
 import { Classroom } from "./classroom.entity";
-import { Teacher } from "./teacher.entity";
+import { Details } from "./details.entity";
+import { UserProfile } from "./user-profiles.entity";
+
 @Entity({
   tableName: "attachment",
 })
 @Index({ properties: ["classroom"] })
 @Index({ properties: ["teacher"] })
-export class Attachment {
-  @PrimaryKey({ type: "uuid" })
-  id: string = v4();
-
+export class Attachment extends Details {
   @Property()
   url!: string;
 
@@ -22,8 +19,8 @@ export class Attachment {
   @ManyToOne(() => Classroom, { nullable: true })
   classroom?: Classroom;
 
-  @ManyToOne(() => Teacher, { nullable: true })
-  teacher?: Teacher;
+  @ManyToOne(() => UserProfile, { nullable: true })
+  teacher?: UserProfile;
 
   @Property()
   createdAt: Date = new Date();

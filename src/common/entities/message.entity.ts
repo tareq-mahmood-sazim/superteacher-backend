@@ -1,26 +1,19 @@
-import { Entity, PrimaryKey, Property, ManyToOne, Enum, Index } from "@mikro-orm/core";
+import { Entity, Property, ManyToOne, Enum, Index } from "@mikro-orm/core";
 
-import { v4 } from "uuid";
+import { UserType } from "@/common/enums/main.enum";
 
 import { Classroom } from "./classroom.entity";
-import { UserType } from "./main.enum";
-import { Student } from "./student.entity";
-import { Teacher } from "./teacher.entity";
+import { Details } from "./details.entity";
+import { UserProfile } from "./user-profiles.entity";
 
 @Entity({
   tableName: "message",
 })
 @Index({ properties: ["classroom"] })
-@Index({ properties: ["senderId"] })
-export class Message {
-  @PrimaryKey({ type: "uuid" })
-  id: string = v4();
-
+@Index({ properties: ["sender"] })
+export class Message extends Details {
   @Property()
   content!: string;
-
-  @Property()
-  senderId!: string;
 
   @Enum(() => UserType)
   senderType!: UserType;
@@ -28,12 +21,6 @@ export class Message {
   @ManyToOne(() => Classroom)
   classroom!: Classroom;
 
-  @Property()
-  createdAt: Date = new Date();
-
-  @ManyToOne(() => Student, { nullable: true })
-  student?: Student;
-
-  @ManyToOne(() => Teacher, { nullable: true })
-  teacher?: Teacher;
+  @ManyToOne(() => UserProfile, { nullable: true })
+  sender?: UserProfile;
 }

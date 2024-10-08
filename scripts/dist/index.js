@@ -79,8 +79,7 @@ var __importDefault =
 Object.defineProperty(exports, "__esModule", { value: true });
 const readline = __importStar(require("readline"));
 const postgres_1 = __importDefault(require("postgres"));
-const uuid_1 = require("uuid");
-const sql = (0, postgres_1.default)("postgresql://postgres:postgres@localhost:5432/project_dev_db");
+const sql = (0, postgres_1.default)("postgresql://postgres:postgres@localhost:5432/superteacher");
 function random_alphaneumeric_string_generator(length = 8) {
   let result = "";
   const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -97,7 +96,6 @@ const rl = readline.createInterface({
 rl.question("Enter your email ->", (email) =>
   __awaiter(void 0, void 0, void 0, function* () {
     const code = random_alphaneumeric_string_generator(8);
-    const id = (0, uuid_1.v4)();
     const createdAt = new Date();
     const updatedAt = new Date();
     const check = yield sql`SELECT * FROM otp WHERE email = ${email}`;
@@ -106,9 +104,9 @@ rl.question("Enter your email ->", (email) =>
       process.exit(0);
     }
     const call = yield sql`
-        INSERT INTO otp (id, created_At, updated_At, email, otp) 
+        INSERT INTO otp (created_At, updated_At, email, otp, wrong_attempts) 
         VALUES 
-        (${id}, ${createdAt}, ${updatedAt}, ${email}, ${code})`;
+        (${createdAt}, ${updatedAt}, ${email}, ${code}, 0)`;
     if (!email) {
       console.log("Please enter valid email.");
     } else {

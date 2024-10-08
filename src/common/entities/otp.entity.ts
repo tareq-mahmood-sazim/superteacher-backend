@@ -11,4 +11,7 @@ export class Otp extends Details {
 
   @Property({ type: "string", unique: true })
   email!: string;
+
+  @Property({ type: "int" })
+  wrongAttempts!: number;
 }

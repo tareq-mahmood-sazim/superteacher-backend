@@ -1,8 +1,7 @@
 import postgres from "postgres";
 import * as readline from "readline";
-import { v4 } from "uuid";
 
-const sql = postgres("postgresql://postgres:postgres@localhost:5432/project_dev_db");
+const sql = postgres("postgresql://postgres:postgres@localhost:5432/superteacher");
 
 function random_alphaneumeric_string_generator(length: number = 8) {
   let result = "";
@@ -21,7 +20,6 @@ const rl = readline.createInterface({
 
 rl.question("Enter your email ->", async (email: string) => {
   const code = random_alphaneumeric_string_generator(8);
-  const id = v4();
   const createdAt = new Date();
   const updatedAt = new Date();
   const check = await sql`SELECT * FROM otp WHERE email = ${email}`;
@@ -30,9 +28,9 @@ rl.question("Enter your email ->", async (email: string) => {
     process.exit(0);
   }
   const call = await sql`
-        INSERT INTO otp (id, created_At, updated_At, email, otp) 
+        INSERT INTO otp (id, created_At, updated_At, email, otp, wrong_attempts) 
         VALUES 
-        (${id}, ${createdAt}, ${updatedAt}, ${email}, ${code})`;
+        (${createdAt}, ${updatedAt}, ${email}, ${code}, 0)`;
   if (!email) {
     console.log("Please enter valid email.");
   } else {

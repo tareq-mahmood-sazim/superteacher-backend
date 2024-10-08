@@ -39,6 +39,10 @@ export class UserProfileDto implements Pick<UserProfile, "firstName" | "lastName
   @IsOptional()
   @IsInt()
   role?: number;
+
+  @IsString()
+  @IsOptional()
+  uniquecode!: string;
 }
 
 export class RegisterUserDto implements Pick<User, "email" | "password"> {

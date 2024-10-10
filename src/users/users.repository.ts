@@ -10,21 +10,58 @@ import { RegisterUserDto } from "./users.dtos";
 
 @Injectable()
 export class UsersRepository extends EntityRepository<User> {
-  createOne(registerUserDto: RegisterUserDto, role: Role) {
+  async createOne(registerUserDto: RegisterUserDto, role: Role) {
     const {
       email,
       password,
-      profileInput: { firstName, lastName },
+      profileInput: {
+        firstName,
+        lastName,
+        gender,
+        educationLevel,
+        majorSubject,
+        subjectsToTeach,
+        medium,
+        classLevel,
+        degree,
+        semesterOrYear,
+        highestEducationLevel,
+      },
     } = registerUserDto;
 
     const user = new User(email, password);
-    const userProfile = new UserProfile(firstName, lastName);
+
+    const userProfile = new UserProfile(firstName, lastName, role);
+    userProfile.gender = gender;
+    userProfile.majorSubject = majorSubject ?? "";
+
+    if (educationLevel && educationLevel.length > 0) {
+      userProfile.educationLevel = educationLevel;
+    }
+    if (medium && medium.length > 0) {
+      userProfile.medium = medium;
+    }
+    if (highestEducationLevel && highestEducationLevel.length > 0) {
+      userProfile.highestEducationLevel = highestEducationLevel;
+    }
+    if (subjectsToTeach) {
+      userProfile.subjectsToTeach = subjectsToTeach;
+    }
+    if (classLevel) {
+      userProfile.classLevel = classLevel;
+    }
+    if (degree) {
+      userProfile.degree = degree;
+    }
+    if (semesterOrYear) {
+      userProfile.semesterOrYear = semesterOrYear;
+    }
 
     userProfile.role = role;
     user.userProfile = userProfile;
     userProfile.user = user;
 
-    this.em.persist([user, userProfile]);
+    await this.em.persistAndFlush([user, userProfile]);
 
     return user;
   }

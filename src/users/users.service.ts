@@ -5,9 +5,9 @@ import { EntityManager } from "@mikro-orm/core";
 import * as argon2 from "argon2";
 
 import { ARGON2_OPTIONS } from "@/common/config/argon2.config";
-import { EUserRole } from "@/common/enums/roles.enums";
 
 import { RolesRepository } from "../roles/roles.repository";
+import { UniquecodeRepository } from "../uniquecode/uniquecode.repository";
 import { RegisterUserDto } from "./users.dtos";
 import { UsersRepository } from "./users.repository";
 
@@ -17,6 +17,7 @@ export class UsersService {
     private readonly entityManager: EntityManager,
     private readonly usersRepository: UsersRepository,
     private readonly rolesRepository: RolesRepository,
+    private readonly uniquecodeRepository: UniquecodeRepository,
   ) {}
 
   private hashPassword(password: string) {
@@ -42,7 +43,7 @@ export class UsersService {
     return user;
   }
 
-  async createOne(registerUserDto: RegisterUserDto, roleName = EUserRole.ADMIN) {
+  async createOne(registerUserDto: RegisterUserDto) {
     const existingUser = await this.usersRepository.findOne({
       email: registerUserDto.email,
     });
@@ -51,18 +52,52 @@ export class UsersService {
       throw new BadRequestException("User already exists");
     }
 
-    const role = await this.rolesRepository.findOneOrFail({ name: roleName });
+    const role = await this.rolesRepository.findOneOrFail({
+      id: registerUserDto.profileInput.role,
+    });
 
-    const newUser = this.usersRepository.createOne(
-      {
-        ...registerUserDto,
-        password: await this.hashPassword(registerUserDto.password),
-      },
-      role,
-    );
+    const hashedPassword = await this.hashPassword(registerUserDto.password);
 
-    await this.entityManager.flush();
+    if (role.name === "TEACHER") {
+      const uniqueCode = await this.uniquecodeRepository.getUniquecode(registerUserDto.email);
 
-    return newUser;
+      if (!uniqueCode) {
+        throw new BadRequestException("Unregistered Email");
+      }
+
+      if (uniqueCode.wrongAttempts >= 3) {
+        throw new BadRequestException("Too many wrong attempts");
+      }
+
+      if (uniqueCode.otp !== registerUserDto.profileInput.uniquecode) {
+        await this.uniquecodeRepository.updateWrongAttempt(registerUserDto.email);
+        throw new BadRequestException("Wrong Unique Code");
+      }
+
+      const newUser = this.usersRepository.createOne(
+        {
+          ...registerUserDto,
+          password: hashedPassword,
+        },
+        role,
+      );
+
+      await this.entityManager.flush();
+
+      await this.uniquecodeRepository.deleteUniquecode(registerUserDto.email);
+      await this.entityManager.flush();
+
+      return newUser;
+    } else {
+      const newUser = this.usersRepository.createOne(
+        {
+          ...registerUserDto,
+          password: hashedPassword,
+        },
+        role,
+      );
+      await this.entityManager.flush();
+      return newUser;
+    }
   }
 }

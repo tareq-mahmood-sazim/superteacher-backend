@@ -56,34 +56,43 @@ export class UsersService {
       id: registerUserDto.profileInput.role,
     });
 
+    const hashedPassword = await this.hashPassword(registerUserDto.password);
+
     if (role.name === "TEACHER") {
       const uniqueCode = await this.uniquecodeRepository.getUniquecode(registerUserDto.email);
+
       if (!uniqueCode) {
         throw new BadRequestException("Unregistered Email");
       }
+
       if (uniqueCode.wrongAttempts >= 3) {
         throw new BadRequestException("Too many wrong attempts");
       }
+
       if (uniqueCode.otp !== registerUserDto.profileInput.uniquecode) {
-        console.log(uniqueCode.otp, registerUserDto.profileInput.uniquecode);
         await this.uniquecodeRepository.updateWrongAttempt(registerUserDto.email);
         throw new BadRequestException("Wrong Unique Code");
       }
+
       const newUser = this.usersRepository.createOne(
         {
           ...registerUserDto,
-          password: await this.hashPassword(registerUserDto.password),
+          password: hashedPassword,
         },
         role,
       );
+
+      await this.entityManager.flush();
+
       await this.uniquecodeRepository.deleteUniquecode(registerUserDto.email);
       await this.entityManager.flush();
+
       return newUser;
     } else {
       const newUser = this.usersRepository.createOne(
         {
           ...registerUserDto,
-          password: await this.hashPassword(registerUserDto.password),
+          password: hashedPassword,
         },
         role,
       );

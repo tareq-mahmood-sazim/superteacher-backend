@@ -14,15 +14,48 @@ export class UsersRepository extends EntityRepository<User> {
     const {
       email,
       password,
-      profileInput: { firstName, lastName, gender, educationLevel, majorSubject },
+      profileInput: {
+        firstName,
+        lastName,
+        gender,
+        educationLevel,
+        majorSubject,
+        subjectsToTeach,
+        medium,
+        classLevel,
+        degree,
+        semesterOrYear,
+        highestEducationLevel,
+      },
     } = registerUserDto;
 
     const user = new User(email, password);
 
     const userProfile = new UserProfile(firstName, lastName, role);
     userProfile.gender = gender;
-    userProfile.educationLevel = educationLevel;
     userProfile.majorSubject = majorSubject ?? "";
+
+    if (educationLevel && educationLevel.length > 0) {
+      userProfile.educationLevel = educationLevel;
+    }
+    if (medium && medium.length > 0) {
+      userProfile.medium = medium;
+    }
+    if (highestEducationLevel && highestEducationLevel.length > 0) {
+      userProfile.highestEducationLevel = highestEducationLevel;
+    }
+    if (subjectsToTeach) {
+      userProfile.subjectsToTeach = subjectsToTeach;
+    }
+    if (classLevel) {
+      userProfile.classLevel = classLevel;
+    }
+    if (degree) {
+      userProfile.degree = degree;
+    }
+    if (semesterOrYear) {
+      userProfile.semesterOrYear = semesterOrYear;
+    }
 
     userProfile.role = role;
     user.userProfile = userProfile;

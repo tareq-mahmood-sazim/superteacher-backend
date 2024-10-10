@@ -16,7 +16,7 @@ const ormConfig = defineConfig({
 
   metadataProvider: ReflectMetadataProvider,
 
-  clientUrl: "postgresql://postgres:postgres@localhost:5432/superteacher?schema=public",
+  clientUrl: process.env.DATABASE_URL,
   extensions: [Migrator, SeedManager],
 
   validate: true,

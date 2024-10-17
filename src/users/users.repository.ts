@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 
-import { EntityRepository } from "@mikro-orm/postgresql";
+import { EntityRepository, wrap } from "@mikro-orm/postgresql";
 
 import { Role } from "@/common/entities/roles.entity";
 import { UserProfile } from "@/common/entities/user-profiles.entity";
@@ -11,57 +11,40 @@ import { RegisterUserDto } from "./users.dtos";
 @Injectable()
 export class UsersRepository extends EntityRepository<User> {
   async createOne(registerUserDto: RegisterUserDto, role: Role) {
+    const { email, password, profileInput } = registerUserDto;
     const {
-      email,
-      password,
-      profileInput: {
-        firstName,
-        lastName,
-        gender,
-        educationLevel,
-        majorSubject,
-        subjectsToTeach,
-        medium,
-        classLevel,
-        degree,
-        semesterOrYear,
-        highestEducationLevel,
-      },
-    } = registerUserDto;
+      firstName,
+      lastName,
+      gender,
+      majorSubject,
+      educationLevel,
+      medium,
+      highestEducationLevel,
+      subjectsToTeach,
+      classLevel,
+      degree,
+      semesterOrYear,
+    } = profileInput;
 
     const user = new User(email, password);
-
     const userProfile = new UserProfile(firstName, lastName, role);
-    userProfile.gender = gender;
-    userProfile.majorSubject = majorSubject ?? "";
 
-    if (educationLevel && educationLevel.length > 0) {
-      userProfile.educationLevel = educationLevel;
-    }
-    if (medium && medium.length > 0) {
-      userProfile.medium = medium;
-    }
-    if (highestEducationLevel && highestEducationLevel.length > 0) {
-      userProfile.highestEducationLevel = highestEducationLevel;
-    }
-    if (subjectsToTeach) {
-      userProfile.subjectsToTeach = subjectsToTeach;
-    }
-    if (classLevel) {
-      userProfile.classLevel = classLevel;
-    }
-    if (degree) {
-      userProfile.degree = degree;
-    }
-    if (semesterOrYear) {
-      userProfile.semesterOrYear = semesterOrYear;
-    }
-
-    userProfile.role = role;
+    wrap(userProfile).assign({
+      user,
+      role,
+      gender,
+      majorSubject: majorSubject ?? "",
+      educationLevel: educationLevel ?? null,
+      medium: medium ?? null,
+      highestEducationLevel: highestEducationLevel ?? null,
+      subjectsToTeach: subjectsToTeach ?? null,
+      classLevel: classLevel ?? null,
+      degree: degree ?? null,
+      semesterOrYear: semesterOrYear ?? null,
+    });
     user.userProfile = userProfile;
-    userProfile.user = user;
 
-    await this.em.persistAndFlush([user, userProfile]);
+    await this.em.persistAndFlush(user);
 
     return user;
   }

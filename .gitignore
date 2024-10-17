@@ -47,3 +47,6 @@ certs
 scripts/node_modules
 scripts/package.json
 scripts/package-lock.json
+scripts/dist
+scripts/yarn.lock
+scripts/tsconfig.json

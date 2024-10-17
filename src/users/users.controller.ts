@@ -16,6 +16,7 @@ export class UsersController {
     private readonly usersService: UsersService,
     private readonly usersSerializer: UsersSerializer,
   ) {}
+  @UseGuards(JwtAuthGuard)
   @Get("me")
   me(@CurrentUser() user: ITokenizedUser): TokenizedUser {
     return user;

@@ -20,7 +20,7 @@ export const createUserInDb = async (
   const defaultConfig = {
     email: MOCK_AUTH_EMAIL,
     password: MOCK_AUTH_PASS,
-    role: EUserRole.ADMIN,
+    role: EUserRole.STUDENT,
   };
 
   const password = config?.password || defaultConfig.password;

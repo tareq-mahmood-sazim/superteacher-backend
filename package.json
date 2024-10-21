@@ -19,6 +19,7 @@
     "invoke_code": "node ./scripts/dist/index.js",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "lint-staged": "lint-staged",
+    "dev:prepare": "yarn format && yarn lint && yarn build",
     "test": "dotenv -e ./.env.test.local -- jest",
     "db:migration:create": "rm ./src/db/migrations/.snapshot.json || dotenv -e ./.env.development.local -- mikro-orm migration:create",
     "db:migration:up:dev": "dotenv -e ./.env.development.local -- mikro-orm migration:up",

@@ -18,9 +18,11 @@ export class ClassroomsController {
     return this.classroomsService.create(createClassroomDto, teacherId);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
-  findAll() {
-    return this.classroomsService.findAll();
+  findAll(@Req() req: { user: TokenizedUser }) {
+    const teacherId = req.user.id;
+    return this.classroomsService.findAllById(teacherId);
   }
 
   @Get(":id")

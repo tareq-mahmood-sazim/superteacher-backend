@@ -41,6 +41,13 @@ export class ClassroomRepository {
     return classroom;
   }
 
+  async getClassroomByTeacherId(id: number) {
+    const classroomByTeacherId = await this.em.find(Classroom, {
+      teacher: id,
+    });
+    return classroomByTeacherId;
+  }
+
   async getClassroomById(id: number) {
     const classRoom = await this.em.findOne(Classroom, id);
     return classRoom;

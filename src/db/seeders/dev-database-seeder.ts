@@ -19,9 +19,9 @@ export class DevDatabaseSeeder extends Seeder {
 
   createRoles(em: EntityManager) {
     const teacherRole = new Role(EUserRole.TEACHER);
-    const STUDENTRole = new Role(EUserRole.STUDENT);
+    const studentRole = new Role(EUserRole.STUDENT);
 
-    em.persist([teacherRole, STUDENTRole]);
+    em.persist([teacherRole, studentRole]);
   }
 
   async createTestUser(em: EntityManager) {

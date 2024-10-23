@@ -11,23 +11,20 @@ import { RegisterUserDto } from "./users.dtos";
 @Injectable()
 export class UsersRepository extends EntityRepository<User> {
   async createOne(registerUserDto: RegisterUserDto, role: Role) {
+    const { email, password, profileInput } = registerUserDto;
     const {
-      email,
-      password,
-      profileInput: {
-        firstName,
-        lastName,
-        gender,
-        educationLevel,
-        majorSubject,
-        subjectsToTeach,
-        medium,
-        classLevel,
-        degree,
-        semesterOrYear,
-        highestEducationLevel,
-      },
-    } = registerUserDto;
+      firstName,
+      lastName,
+      gender,
+      majorSubject,
+      educationLevel,
+      medium,
+      highestEducationLevel,
+      subjectsToTeach,
+      classLevel,
+      degree,
+      semesterOrYear,
+    } = profileInput;
 
     const user = new User(email, password);
     const userProfile = new UserProfile(firstName, lastName, role);
@@ -47,7 +44,7 @@ export class UsersRepository extends EntityRepository<User> {
     });
     user.userProfile = userProfile;
 
-    await this.em.persistAndFlush([user, userProfile]);
+    await this.em.persistAndFlush(user);
 
     return user;
   }

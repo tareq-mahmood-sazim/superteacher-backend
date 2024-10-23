@@ -14,4 +14,11 @@ export class UniquecodeRepository {
   deleteUniquecode(email: string) {
     return this.em.nativeDelete(Otp, { email });
   }
+  async updateWrongAttempt(email: string) {
+    const getWrongCount = await this.em.findOne(Otp, { email });
+    if (!getWrongCount) {
+      throw new Error("OTP entry not found");
+    }
+    return this.em.nativeUpdate(Otp, { email }, { wrongAttempts: getWrongCount.wrongAttempts + 1 });
+  }
 }

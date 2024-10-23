@@ -14,7 +14,19 @@ export class UsersRepository extends EntityRepository<User> {
     const {
       email,
       password,
-      profileInput: { firstName, lastName, gender, educationLevel, majorSubject },
+      profileInput: {
+        firstName,
+        lastName,
+        gender,
+        educationLevel,
+        majorSubject,
+        subjectsToTeach,
+        medium,
+        classLevel,
+        degree,
+        semesterOrYear,
+        highestEducationLevel,
+      },
     } = registerUserDto;
 
     const user = new User(email, password);

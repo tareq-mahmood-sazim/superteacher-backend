@@ -47,7 +47,3 @@ certs
 scripts/node_modules
 scripts/package.json
 scripts/package-lock.json
-scripts/yarn.lock
-scripts/install-extension.sql
-scripts/README.md
-scripts/dist

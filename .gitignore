@@ -50,3 +50,4 @@ scripts/package-lock.json
 scripts/dist
 scripts/yarn.lock
 scripts/tsconfig.json
+scripts/tsconfig.tsbuildinfo

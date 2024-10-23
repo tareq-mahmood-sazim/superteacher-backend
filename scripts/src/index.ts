@@ -1,7 +1,7 @@
 import postgres from "postgres";
 import * as readline from "readline";
 
-const sql = postgres("postgresql://postgres:postgres@localhost:5432/superteacher");
+const sql = postgres((process.env.DATABASE_URL as string) ?? "");
 
 function random_alphaneumeric_string_generator(length: number = 8) {
   let result = "";
@@ -28,7 +28,7 @@ rl.question("Enter your email ->", async (email: string) => {
     process.exit(0);
   }
   const call = await sql`
-        INSERT INTO otp (id, created_At, updated_At, email, otp, wrong_attempts) 
+        INSERT INTO otp (created_At, updated_At, email, otp, wrong_attempts) 
         VALUES 
         (${createdAt}, ${updatedAt}, ${email}, ${code}, 0)`;
   if (!email) {

@@ -2,7 +2,7 @@ import postgres from "postgres";
 import * as readline from "readline";
 import { v4 } from "uuid";
 
-const sql = postgres("postgresql://postgres:postgres@localhost:5432/project_dev_db");
+const sql = postgres(process.env.DATABASE_URL as string ?? "");
 
 function random_alphaneumeric_string_generator(length: number = 8) {
   let result = "";

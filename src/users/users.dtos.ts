@@ -1,6 +1,7 @@
 import { Type } from "class-transformer";
 import {
   IsEmail,
+  IsInt,
   IsObject,
   IsOptional,
   IsString,
@@ -10,6 +11,7 @@ import {
 } from "class-validator";
 
 import { ITokenizedUser } from "@/auth/auth.interfaces";
+import { EducationLevel, Gender } from "@/common/entities/main.enum";
 import { UserProfile } from "@/common/entities/user-profiles.entity";
 import { User } from "@/common/entities/users.entity";
 import { EUserRole } from "@/common/enums/roles.enums";
@@ -25,6 +27,18 @@ export class UserProfileDto implements Pick<UserProfile, "firstName" | "lastName
   @MinLength(2)
   @MaxLength(255)
   lastName!: string;
+
+  gender!: Gender;
+  educationLevel?: EducationLevel;
+
+  @IsString()
+  @MinLength(2)
+  @MaxLength(255)
+  majorSubject?: string;
+
+  @IsOptional()
+  @IsInt()
+  role?: number;
 }
 
 export class RegisterUserDto implements Pick<User, "email" | "password"> {

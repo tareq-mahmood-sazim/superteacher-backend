@@ -5,7 +5,6 @@ import { EntityManager } from "@mikro-orm/core";
 import * as argon2 from "argon2";
 
 import { ARGON2_OPTIONS } from "@/common/config/argon2.config";
-import { EUserRole } from "@/common/enums/roles.enums";
 
 import { RolesRepository } from "../roles/roles.repository";
 import { RegisterUserDto } from "./users.dtos";
@@ -42,7 +41,7 @@ export class UsersService {
     return user;
   }
 
-  async createOne(registerUserDto: RegisterUserDto, roleName = EUserRole.ADMIN) {
+  async createOne(registerUserDto: RegisterUserDto) {
     const existingUser = await this.usersRepository.findOne({
       email: registerUserDto.email,
     });
@@ -51,7 +50,9 @@ export class UsersService {
       throw new BadRequestException("User already exists");
     }
 
-    const role = await this.rolesRepository.findOneOrFail({ name: roleName });
+    const role = await this.rolesRepository.findOneOrFail({
+      id: registerUserDto.profileInput.role,
+    });
 
     const newUser = this.usersRepository.createOne(
       {
@@ -60,7 +61,6 @@ export class UsersService {
       },
       role,
     );
-
     await this.entityManager.flush();
 
     return newUser;

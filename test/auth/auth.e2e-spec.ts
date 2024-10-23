@@ -101,7 +101,7 @@ describe("AuthController (e2e)", () => {
 
         @Get("/requires-specific-role")
         @UseGuards(JwtAuthGuard, RolesGuard)
-        @Roles(EUserRole.SUPER_USER)
+        @Roles(EUserRole.TEACHER)
         public requiresSpecificRole() {
           return "You have the required role!";
         }
@@ -162,7 +162,7 @@ describe("AuthController (e2e)", () => {
 
         await createUserInDb(dbService, {
           email,
-          role: EUserRole.ADMIN,
+          role: EUserRole.STUDENT,
         });
 
         const { body } = await request(authorizationHttpServer)
@@ -182,7 +182,7 @@ describe("AuthController (e2e)", () => {
 
         await createUserInDb(dbService, {
           email,
-          role: EUserRole.SUPER_USER,
+          role: EUserRole.TEACHER,
         });
 
         const { body } = await request(authorizationHttpServer)
@@ -204,7 +204,7 @@ describe("AuthController (e2e)", () => {
 
         await createUserInDb(dbService, {
           email,
-          role: EUserRole.ADMIN,
+          role: EUserRole.STUDENT,
         });
 
         const { body } = await request(authorizationHttpServer)
@@ -224,7 +224,7 @@ describe("AuthController (e2e)", () => {
 
         await createUserInDb(dbService, {
           email,
-          role: EUserRole.SUPER_USER,
+          role: EUserRole.TEACHER,
         });
 
         const { body } = await request(authorizationHttpServer)

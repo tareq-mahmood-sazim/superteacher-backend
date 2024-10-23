@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 
-import { EntityRepository } from "@mikro-orm/postgresql";
+import { EntityRepository, wrap } from "@mikro-orm/postgresql";
 
 import { Role } from "@/common/entities/roles.entity";
 import { UserProfile } from "@/common/entities/user-profiles.entity";
@@ -10,21 +10,32 @@ import { RegisterUserDto } from "./users.dtos";
 
 @Injectable()
 export class UsersRepository extends EntityRepository<User> {
-  createOne(registerUserDto: RegisterUserDto, role: Role) {
+  async createOne(registerUserDto: RegisterUserDto, role: Role) {
     const {
       email,
       password,
-      profileInput: { firstName, lastName },
+      profileInput: { firstName, lastName, gender, educationLevel, majorSubject },
     } = registerUserDto;
 
     const user = new User(email, password);
-    const userProfile = new UserProfile(firstName, lastName);
+    const userProfile = new UserProfile(firstName, lastName, role);
 
-    userProfile.role = role;
+    wrap(userProfile).assign({
+      user,
+      role,
+      gender,
+      majorSubject: majorSubject ?? "",
+      educationLevel: educationLevel ?? null,
+      medium: medium ?? null,
+      highestEducationLevel: highestEducationLevel ?? null,
+      subjectsToTeach: subjectsToTeach ?? null,
+      classLevel: classLevel ?? null,
+      degree: degree ?? null,
+      semesterOrYear: semesterOrYear ?? null,
+    });
     user.userProfile = userProfile;
-    userProfile.user = user;
 
-    this.em.persist([user, userProfile]);
+    await this.em.persistAndFlush([user, userProfile]);
 
     return user;
   }

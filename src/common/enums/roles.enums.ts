@@ -1,6 +1,6 @@
 export enum EUserRole {
-  SUPER_USER = "SUPER_USER",
-  ADMIN = "ADMIN",
+  TEACHER = "TEACHER",
+  STUDENT = "STUDENT",
 }
 
 export enum EPermission {

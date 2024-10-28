@@ -17,7 +17,6 @@ const ormConfig = defineConfig({
   metadataProvider: ReflectMetadataProvider,
 
   clientUrl: process.env.DATABASE_URL,
-
   extensions: [Migrator, SeedManager],
 
   validate: true,

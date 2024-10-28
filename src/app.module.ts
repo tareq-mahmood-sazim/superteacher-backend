@@ -12,6 +12,7 @@ import ormConfig from "./db/db.config";
 import { FileUploadsModule } from "./file-uploads/file-uploads.module";
 import { HealthModule } from "./health/health.module";
 import { RolesModule } from "./roles/roles.module";
+import { UniquecodeModule } from "./uniquecode/uniquecode.module";
 import { UserProfilesModule } from "./user-profiles/user-profiles.module";
 import { UsersModule } from "./users/users.module";
 import { WebsocketExampleModule } from "./websocket-example/websocket-example.module";
@@ -37,6 +38,7 @@ import { WebsocketExampleModule } from "./websocket-example/websocket-example.mo
     WebsocketExampleModule,
     UserProfilesModule,
     HealthModule,
+    UniquecodeModule,
   ],
   controllers: [],
   providers: [Logger],

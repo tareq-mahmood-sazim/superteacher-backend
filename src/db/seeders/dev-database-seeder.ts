@@ -7,6 +7,7 @@ import { ARGON2_OPTIONS } from "@/common/config/argon2.config";
 import { Role } from "@/common/entities/roles.entity";
 import { UserProfile } from "@/common/entities/user-profiles.entity";
 import { User } from "@/common/entities/users.entity";
+import { Gender } from "@/common/enums/main.enum";
 import { EUserRole } from "@/common/enums/roles.enums";
 
 export class DevDatabaseSeeder extends Seeder {
@@ -17,10 +18,10 @@ export class DevDatabaseSeeder extends Seeder {
   }
 
   createRoles(em: EntityManager) {
-    const superUserRole = new Role(EUserRole.SUPER_USER);
-    const adminRole = new Role(EUserRole.ADMIN);
+    const teacherRole = new Role(EUserRole.TEACHER);
+    const studentRole = new Role(EUserRole.STUDENT);
 
-    em.persist([superUserRole, adminRole]);
+    em.persist([teacherRole, studentRole]);
   }
 
   async createTestUser(em: EntityManager) {
@@ -28,9 +29,11 @@ export class DevDatabaseSeeder extends Seeder {
     const hashedPassword = await argon2.hash("test123", ARGON2_OPTIONS);
 
     const user = new User(email, hashedPassword);
-
-    const userProfile = new UserProfile("Test", "User");
+    const role = new Role(EUserRole.STUDENT);
+    const userProfile = new UserProfile("Test", "User", role);
     userProfile.role = em.getReference(Role, 1);
+    userProfile.gender = Gender.MALE;
+    userProfile.major = "Computer Science";
 
     user.userProfile = userProfile;
 

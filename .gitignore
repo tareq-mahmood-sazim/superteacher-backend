@@ -42,3 +42,11 @@ lerna-debug.log*
 volume
 .snapshot.json
 certs
+
+# Scripts
+scripts/node_modules
+scripts/package.json
+scripts/package-lock.json
+scripts/dist
+scripts/yarn.lock
+scripts/tsconfig.json

@@ -19,3 +19,20 @@ export class UsersSerializer extends AbstractBaseSerializer {
     populate: ["userProfile.role"],
   };
 }
+
+@Injectable()
+export class UsersProfileSerializer extends AbstractBaseSerializer {
+  protected serializeOneOptions: TSerializationOptions = {
+    skipNull: true,
+    forceObject: true,
+    exclude: ["userProfile.user.password"],
+    populate: ["userProfile.role", "userProfile.user"],
+  };
+
+  protected serializeManyOptions: TSerializationOptions = {
+    skipNull: true,
+    forceObject: true,
+    exclude: ["userProfile.user.password"],
+    populate: ["userProfile.role", "userProfile.user"],
+  };
+}

@@ -27,6 +27,9 @@ export class Classroom extends Details {
   @Property()
   classTime!: Date;
 
+  @Property({ nullable: true })
+  meetLink!: string;
+
   @Property()
   daysOfTheWeek!: string[];
 

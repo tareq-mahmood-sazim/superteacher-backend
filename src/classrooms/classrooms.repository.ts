@@ -6,6 +6,7 @@ import { Classroom } from "@/common/entities/classroom.entity";
 import { UserProfile } from "@/common/entities/user-profiles.entity";
 import { EUserRole } from "@/common/enums/roles.enums";
 
+import { AddMeetLinkDto } from "./dto/add-meetLink.dto";
 import { CreateClassroomDto } from "./dto/create-classroom.dto";
 
 @Injectable()
@@ -148,6 +149,14 @@ export class ClassroomRepository {
   async deleteClassroom(id: number) {
     const classroom = await this.em.findOne(Classroom, id);
     await this.em.nativeDelete(Classroom, id);
+    return classroom;
+  }
+
+  async addMeetLink(addMeetLink: AddMeetLinkDto) {
+    const classroom = await this.em.findOne(Classroom, addMeetLink.classroomId);
+    if (!classroom) return { message: "Classroom not found" };
+    classroom.meetLink = addMeetLink.meetLink;
+    await this.em.persistAndFlush(classroom);
     return classroom;
   }
 }

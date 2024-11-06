@@ -2,6 +2,8 @@ import { ForbiddenException, Injectable } from "@nestjs/common";
 
 import { EntityManager } from "@mikro-orm/postgresql";
 
+import dayjs from "dayjs";
+
 import { Classroom } from "@/common/entities/classroom.entity";
 import { UserProfile } from "@/common/entities/user-profiles.entity";
 import { EUserRole } from "@/common/enums/roles.enums";
@@ -27,8 +29,7 @@ export class ClassroomRepository {
     }
 
     const [hours, minutes] = classTime.split(":");
-    const timeAsDate = new Date();
-    timeAsDate.setHours(Number(hours), Number(minutes), 0, 0);
+    const timeAsDate = dayjs().set('hour', Number(hours)).set('minute', Number(minutes)).second(0).millisecond(0).toDate();
 
     const classroom = new Classroom();
     classroom.title = title;

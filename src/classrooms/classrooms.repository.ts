@@ -29,7 +29,12 @@ export class ClassroomRepository {
     }
 
     const [hours, minutes] = classTime.split(":");
-    const timeAsDate = dayjs().set('hour', Number(hours)).set('minute', Number(minutes)).second(0).millisecond(0).toDate();
+    const timeAsDate = dayjs()
+      .set("hour", Number(hours))
+      .set("minute", Number(minutes))
+      .second(0)
+      .millisecond(0)
+      .toDate();
 
     const classroom = new Classroom();
     classroom.title = title;

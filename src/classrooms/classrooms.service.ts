@@ -10,13 +10,17 @@ export class ClassroomsService {
   create(createClassroomDto: CreateClassroomDto, teacherId: number) {
     return this.classroomRepository.createClassroom(createClassroomDto, teacherId);
   }
-
+  
+  findAllById(id: number) {
+    return this.classroomRepository.getClassroomByTeacherId(id);
+  }
+  
   findAll() {
     return `This action returns all classrooms`;
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} classroom`;
+    return this.classroomRepository.getClassroomById(id);
   }
 
   update(id: number, updateClassroomDto: UpdateClassroomDto) {

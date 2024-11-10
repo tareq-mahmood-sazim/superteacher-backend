@@ -1,4 +1,12 @@
-import { Entity, Property, OneToMany, ManyToMany, Collection } from "@mikro-orm/core";
+import {
+  Entity,
+  Property,
+  OneToMany,
+  ManyToMany,
+  Collection,
+  ManyToOne,
+  Rel,
+} from "@mikro-orm/core";
 
 import { Assignment } from "./assignment.entity";
 import { Attachment } from "./attachment.entity";
@@ -20,7 +28,10 @@ export class Classroom extends Details {
   classTime!: Date;
 
   @Property()
-  days!: string;
+  daysOfTheWeek!: string[];
+
+  @ManyToOne(() => UserProfile, { nullable: false })
+  teacher!: Rel<UserProfile>;
 
   @ManyToMany(() => UserProfile, (userProfile) => userProfile.classrooms, { owner: true })
   participants = new Collection<UserProfile>(this);

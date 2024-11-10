@@ -6,6 +6,7 @@ import { MikroOrmModule } from "@mikro-orm/nestjs";
 import { Message } from "@/common/entities/message.entity";
 
 import { WebsocketExampleGateway } from "./websocket-example.gateway";
+import { MessagesRepository } from "./websocket-example.repository";
 
 @Module({
   imports: [
@@ -17,6 +18,6 @@ import { WebsocketExampleGateway } from "./websocket-example.gateway";
       },
     }),
   ],
-  providers: [WebsocketExampleGateway],
+  providers: [WebsocketExampleGateway, MessagesRepository],
 })
 export class WebsocketExampleModule {}

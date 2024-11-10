@@ -14,6 +14,7 @@ import { TSocket } from "@/common/websockets/abstract-websocket.types";
 
 import { CreateMessageDto } from "./dto/create-message.dto";
 import { EGatewayIncomingEvent, EGatewayOutgoingEvent } from "./websocket-example.enum";
+import { MessagesRepository } from "./websocket-example.repository";
 
 @WebSocketGateway(Number(process.env.BE_WS_PORT), {
   cors: getCorsConfig(),
@@ -21,7 +22,10 @@ import { EGatewayIncomingEvent, EGatewayOutgoingEvent } from "./websocket-exampl
   transports: ["websocket"],
 })
 export class WebsocketExampleGateway extends AbstractWebsocketGateway {
-  constructor(private readonly jwtService: JwtService) {
+  constructor(
+    private readonly jwtService: JwtService,
+    private readonly messagesRepository: MessagesRepository,
+  ) {
     super();
   }
 
@@ -66,8 +70,8 @@ export class WebsocketExampleGateway extends AbstractWebsocketGateway {
 
   @SubscribeMessage(EGatewayIncomingEvent.PING)
   handlePing(@MessageBody() payload: CreateMessageDto, @ConnectedSocket() socket: TSocket): void {
-    const parsedPayload = { ...payload, userId: socket.userId };
-    console.log(parsedPayload);
+    const parsedPayload = { ...payload, sender: socket.userId as number };
+    this.messagesRepository.createMessage(parsedPayload);
     this.emitPayloadForEvent(EGatewayOutgoingEvent.PONG, parsedPayload);
   }
 }

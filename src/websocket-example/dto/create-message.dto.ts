@@ -13,5 +13,5 @@ export class CreateMessageDto {
   senderType!: UserType;
 
   @IsInt()
-  classroom!: number;
+  classroomId!: number;
 }

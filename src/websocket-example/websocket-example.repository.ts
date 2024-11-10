@@ -9,22 +9,27 @@ import { UserProfile } from "@/common/entities/user-profiles.entity";
 import { CreateMessageDto } from "./dto/create-message.dto";
 
 @Injectable()
-export class ClassroomRepository {
+export class MessagesRepository {
   constructor(private readonly em: EntityManager) {}
   async createMessage(createMessageDto: CreateMessageDto) {
+    const em = this.em.fork();
     const message = new Message();
-    const senderId = await this.em.findOne(UserProfile, createMessageDto.sender);
-    const classroomId = await this.em.findOne(Classroom, createMessageDto.classroom);
-    if (senderId || classroomId) return new ForbiddenException();
+
+    const senderId = await em.findOne(UserProfile, { id: createMessageDto.sender });
+    const classroomId = await em.findOne(Classroom, { id: createMessageDto.classroomId });
+
+    if (!senderId || !classroomId) {
+      throw new ForbiddenException("Sender or classroom not found.");
+    }
     if (senderId && classroomId) {
       message.content = createMessageDto.content;
       message.sender = senderId;
       message.classroom = classroomId;
       message.senderType = createMessageDto.senderType;
-      await this.em.persistAndFlush(message);
+      await em.persistAndFlush(message);
       return message;
     } else {
-      throw new ForbiddenException();
+      throw new ForbiddenException("Unable to save.");
     }
   }
   async getMessage(id: number) {

@@ -48,7 +48,7 @@ export class ClassroomsController {
   }
   @UseGuards(JwtAuthGuard)
   @Post("participants/remove")
-  RemoveParticipant(
+  removeParticipant(
     @Req() req: { user: TokenizedUser },
     @Body() removeParticipantDto: RemoveParticipantDto,
   ) {

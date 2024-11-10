@@ -28,7 +28,7 @@ rl.question("Enter your email ->", async (email: string) => {
     process.exit(0);
   }
   const call = await sql`
-        INSERT INTO otp (id, created_At, updated_At, email, otp, wrong_attempts) 
+        INSERT INTO otp (created_At, updated_At, email, otp, wrong_attempts) 
         VALUES 
         (${createdAt}, ${updatedAt}, ${email}, ${code}, 0)`;
   if (!email) {

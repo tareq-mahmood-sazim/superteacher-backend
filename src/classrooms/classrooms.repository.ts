@@ -3,7 +3,6 @@ import { ForbiddenException, Injectable } from "@nestjs/common";
 import { EntityManager } from "@mikro-orm/postgresql";
 
 import dayjs from "dayjs";
-
 import { Classroom } from "@/common/entities/classroom.entity";
 import { UserProfile } from "@/common/entities/user-profiles.entity";
 import { EUserRole } from "@/common/enums/roles.enums";
@@ -46,12 +45,14 @@ export class ClassroomRepository {
     await this.em.persistAndFlush(classroom);
     return classroom;
   }
+
   async getClassroomByTeacherId(id: number) {
     const classroomByTeacherId = await this.em.find(Classroom, {
       teacher: id,
     });
     return classroomByTeacherId;
   }
+
   async getClassroomById(id: number) {
     const classRoom = await this.em.findOne(Classroom, id);
     return classRoom;

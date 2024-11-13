@@ -13,6 +13,7 @@ import ormConfig from "./db/db.config";
 import { FileUploadsModule } from "./file-uploads/file-uploads.module";
 import { HealthModule } from "./health/health.module";
 import { MailerAppModule } from "./mailer-app/mailer-app.module";
+import { MaterialsModule } from "./materials/materials.module";
 import { MessagesModule } from "./messages/messages.module";
 import { RolesModule } from "./roles/roles.module";
 import { UniquecodeModule } from "./uniquecode/uniquecode.module";
@@ -45,6 +46,7 @@ import { WebsocketExampleModule } from "./websocket-example/websocket-example.mo
     ClassroomsModule,
     MailerAppModule,
     MessagesModule,
+    MaterialsModule,
   ],
   controllers: [],
   providers: [Logger],

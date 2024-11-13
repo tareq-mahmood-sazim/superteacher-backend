@@ -1,0 +1,5 @@
+export enum MaterialsEnum {
+  ASSIGNMENT = "ASSIGNMENT",
+  STUDYMATERIALS = "STUDYMATERIALS",
+  EXAM = "EXAM",
+}

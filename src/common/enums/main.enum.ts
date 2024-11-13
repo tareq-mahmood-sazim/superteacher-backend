@@ -1,6 +1,7 @@
 export enum Degree {
   BACHELORS = "BACHELORS",
   MASTERS = "MASTERS",
+  NONE = "null",
 }
 
 export enum EducationLevel {

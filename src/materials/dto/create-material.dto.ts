@@ -18,5 +18,5 @@ export class CreateMaterialDto {
   attachments!: string[];
 
   @IsOptional()
-  classroomId!: number;
+  classroom!: number;
 }

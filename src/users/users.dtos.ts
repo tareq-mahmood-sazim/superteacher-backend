@@ -97,9 +97,10 @@ export class RegisterUserDto implements Pick<User, "email" | "password"> {
 export class UserResponse {
   id!: number;
   email!: string;
-  createdAt!: string;
-  updatedAt!: string;
+  createdAt!: string | Date;
+  updatedAt!: string | Date;
   userProfile!: UserProfileResponse;
+  accessToken!: string;
 }
 
 export class UserProfileResponse {

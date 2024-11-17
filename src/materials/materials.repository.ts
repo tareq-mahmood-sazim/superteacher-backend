@@ -44,7 +44,7 @@ export class MaterialsRepository {
       throw new Error("Title, instructions, and due date are required to create an Materials.");
     }
     const classroomId = await this.em.findOne(Classroom, {
-      id: assignment.classroomId,
+      id: assignment.classroom,
     });
     if (!classroomId) throw new Error("Classroom not found");
     const newAssignment = new Materials();
@@ -61,7 +61,7 @@ export class MaterialsRepository {
     if (!materials.title || !materials.instructions || !materials.dueDate) {
       throw new Error("Title, instructions, and due date are required to create an Materials.");
     }
-    const classroomId = await this.em.findOne(Classroom, { id: materials.classroomId });
+    const classroomId = await this.em.findOne(Classroom, { id: materials.classroom });
     if (!classroomId) throw new Error("Classroom not found");
     const newMaterials = new Materials();
     newMaterials.category = MaterialsEnum.STUDYMATERIALS;
@@ -78,7 +78,7 @@ export class MaterialsRepository {
       throw new Error("Title, instructions, and due date are required to create an Materials.");
     }
     const classroomId = await this.em.findOne(Classroom, {
-      id: exams.classroomId,
+      id: exams.classroom,
     });
     if (!classroomId) throw new Error("Classroom not found");
     const newExams = new Materials();

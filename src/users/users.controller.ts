@@ -23,6 +23,13 @@ export class UsersController {
   me(@CurrentUser() user: ITokenizedUser): TokenizedUser {
     return user;
   }
+  @UseGuards(JwtAuthGuard)
+  @Get("profile/:id")
+  async profile(@Param() params: { id: string }): Promise<UserResponse> {
+    const userId = parseInt(params.id);
+    const profileData = await this.usersService.findByIdOrThrow(userId);
+    return this.usersSerializer.serialize(profileData);
+  }
 
   @UseGuards(JwtAuthGuard)
   @Get("profile/:id")

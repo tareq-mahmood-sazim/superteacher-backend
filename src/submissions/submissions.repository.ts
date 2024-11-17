@@ -51,7 +51,7 @@ export class SubmissionsRepository {
     submission.submittedAt = new Date();
 
     await this.em.persistAndFlush(submission);
-    this.mailerAppService.SendMail({
+    this.mailerAppService.sendMail({
       email: userProfile.user.email,
       subject: `You have submitted an assignment ${material.title}`,
       message: `We recieved your submission on assignment ${material.title} on ${submission.submittedAt}.`,

@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get } from "@nestjs/common";
+import { Controller, Post, Body, Get, Param } from "@nestjs/common";
 
 import { SendMailerAppDto } from "./dto/send-mailer-app.dto";
 import { MailerAppService } from "./mailer-app.service";
@@ -11,7 +11,14 @@ export class MailerAppController {
   // currently active for testing purpose
   @Post()
   sendMail(@Body() createMailerAppDto: SendMailerAppDto) {
-    return this.mailerAppService.SendMail(createMailerAppDto);
+    return this.mailerAppService.sendMail(createMailerAppDto);
+  }
+  @Get("/:id")
+  sendBulkEmail(@Param("id") id: number) {
+    return this.mailerAppService.sendMailToParticipants(id, {
+      subject: "test",
+      message: "message",
+    });
   }
   @Get()
   health() {

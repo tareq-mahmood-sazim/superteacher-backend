@@ -56,4 +56,9 @@ export class ClassroomsService {
   remove(id: number) {
     return this.classroomRepository.deleteClassroom(id);
   }
+
+  async isParticipant(studentId: number, classroomId: number) {
+    const data = await this.classroomRepository.isParticipant(studentId, classroomId);
+    return { statusCode: 200, message: "success", data };
+  }
 }

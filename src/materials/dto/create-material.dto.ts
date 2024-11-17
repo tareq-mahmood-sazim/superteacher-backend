@@ -1,4 +1,4 @@
-import { IsArray, IsDate, IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { IsArray, IsNotEmpty, IsOptional, IsString } from "class-validator";
 
 export class CreateMaterialDto {
   @IsNotEmpty()
@@ -10,8 +10,8 @@ export class CreateMaterialDto {
   instructions!: string;
 
   @IsNotEmpty()
-  @IsDate()
-  dueDate!: Date;
+  @IsString()
+  dueDate!: string;
 
   @IsOptional()
   @IsArray()

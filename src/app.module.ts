@@ -16,6 +16,7 @@ import { MailerAppModule } from "./mailer-app/mailer-app.module";
 import { MaterialsModule } from "./materials/materials.module";
 import { MessagesModule } from "./messages/messages.module";
 import { RolesModule } from "./roles/roles.module";
+import { SubmissionsModule } from "./submissions/submissions.module";
 import { UniquecodeModule } from "./uniquecode/uniquecode.module";
 import { UserProfilesModule } from "./user-profiles/user-profiles.module";
 import { UsersModule } from "./users/users.module";
@@ -47,6 +48,7 @@ import { WebsocketExampleModule } from "./websocket-example/websocket-example.mo
     MailerAppModule,
     MessagesModule,
     MaterialsModule,
+    SubmissionsModule,
   ],
   controllers: [],
   providers: [Logger],

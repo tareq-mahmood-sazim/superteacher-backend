@@ -1,39 +1,48 @@
 import { Injectable } from "@nestjs/common";
 
 import { CreateMaterialDto } from "./dto/create-material.dto";
+import { UpdateMaterialDto } from "./dto/update-material.dto";
 import { MaterialsRepository } from "./materials.repository";
 
 @Injectable()
 export class MaterialsService {
   constructor(private readonly materialRepository: MaterialsRepository) {}
 
-  createAssignment(createMaterialDto: CreateMaterialDto) {
-    return this.materialRepository.createAssignments(createMaterialDto);
+  async createAssignment(createMaterialDto: CreateMaterialDto) {
+    const data = await this.materialRepository.createAssignments(createMaterialDto);
+    return { statusCode: data ? 201 : 400, message: "Assignment created", data };
   }
-  createMaterial(createMaterialDto: CreateMaterialDto) {
-    return this.materialRepository.createMaterials(createMaterialDto);
+  async createMaterial(createMaterialDto: CreateMaterialDto) {
+    const data = await this.materialRepository.createMaterials(createMaterialDto);
+    return { statusCode: data ? 201 : 400, message: "Material created", data };
   }
-  createExam(createMaterialDto: CreateMaterialDto) {
-    return this.materialRepository.createExams(createMaterialDto);
-  }
-
-  findAssignmentByClassroomId(classroomId: number) {
-    return this.materialRepository.findAllAssignments(classroomId);
-  }
-  findMaterialByClassroomId(classroomId: number) {
-    return this.materialRepository.findAllMaterials(classroomId);
-  }
-  findExamByClassroomId(classroomId: number) {
-    return this.materialRepository.findAllExams(classroomId);
+  async createExam(createMaterialDto: CreateMaterialDto) {
+    const data = await this.materialRepository.createExams(createMaterialDto);
+    return { statusCode: data ? 201 : 400, message: "Exam created", data };
   }
 
-  deleteAssignment(assignmentId: number) {
-    return this.materialRepository.deleteAssignment(assignmentId);
+  async findAssignmentByClassroomId(classroomId: number) {
+    const data = await this.materialRepository.findAllAssignments(classroomId);
+    return data;
   }
-  deleteMaterial(materialId: number) {
-    return this.materialRepository.deleteMaterial(materialId);
+  async findMaterialByClassroomId(classroomId: number) {
+    const data = await this.materialRepository.findAllMaterials(classroomId);
+    return data;
   }
-  deleteExam(examId: number) {
-    return this.materialRepository.deleteExam(examId);
+  async findExamByClassroomId(classroomId: number) {
+    const data = await this.materialRepository.findAllExams(classroomId);
+    return data;
+  }
+  async findMaterialById(materialId: number) {
+    const data = await this.materialRepository.findMaterialById(materialId);
+    return data;
+  }
+  async updateMaterialById(materialId: number, updateClassroomDto: UpdateMaterialDto) {
+    const data = await this.materialRepository.updateMaterialById(materialId, updateClassroomDto);
+    return { statusCode: data ? 201 : 400, message: "Material Updated", data };
+  }
+  async deleteMaterial(materialId: number) {
+    const data = await this.materialRepository.deleteMaterial(materialId);
+    return { statusCode: data ? 201 : 400, message: "Material Deleted", data };
   }
 }

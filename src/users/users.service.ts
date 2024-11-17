@@ -1,9 +1,10 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
+import { BadRequestException, forwardRef, Inject, Injectable } from "@nestjs/common";
 
 import { EntityManager } from "@mikro-orm/core";
 
 import * as argon2 from "argon2";
 
+import { AuthService } from "@/auth/auth.service";
 import { ARGON2_OPTIONS } from "@/common/config/argon2.config";
 
 import { RolesRepository } from "../roles/roles.repository";
@@ -14,6 +15,8 @@ import { UsersRepository } from "./users.repository";
 @Injectable()
 export class UsersService {
   constructor(
+    @Inject(forwardRef(() => AuthService))
+    private readonly authService: AuthService,
     private readonly entityManager: EntityManager,
     private readonly usersRepository: UsersRepository,
     private readonly rolesRepository: RolesRepository,
@@ -74,7 +77,7 @@ export class UsersService {
         throw new BadRequestException("Wrong Unique Code");
       }
 
-      const newUser = this.usersRepository.createOne(
+      const newUser = await this.usersRepository.createOne(
         {
           ...registerUserDto,
           password: hashedPassword,
@@ -86,10 +89,10 @@ export class UsersService {
 
       await this.uniquecodeRepository.deleteUniquecode(registerUserDto.email);
       await this.entityManager.flush();
-
-      return newUser;
+      const accessToken = await this.authService.createAccessToken(newUser);
+      return { data: newUser, accessToken };
     } else {
-      const newUser = this.usersRepository.createOne(
+      const newUser = await this.usersRepository.createOne(
         {
           ...registerUserDto,
           password: hashedPassword,
@@ -97,7 +100,8 @@ export class UsersService {
         role,
       );
       await this.entityManager.flush();
-      return newUser;
+      const accessToken = await this.authService.createAccessToken(newUser);
+      return { data: newUser, accessToken };
     }
   }
 

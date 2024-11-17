@@ -6,6 +6,7 @@ export class AbstractBaseSerializer {
   protected serializeOneOptions: TSerializationOptions = {
     skipNull: true,
     forceObject: true,
+    populate: ["userProfile.role"],
   };
 
   protected serializeManyOptions: TSerializationOptions = {

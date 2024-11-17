@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common";
+import { forwardRef, Module } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
 import { PassportModule } from "@nestjs/passport";
 
@@ -19,10 +19,11 @@ import { LocalStrategy } from "./strategies/local.strategy";
         expiresIn: process.env.JWT_TOKEN_LIFETIME,
       },
     }),
-    UsersModule,
+    forwardRef(() => UsersModule),
     RolesModule,
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],
   controllers: [AuthController],
+  exports: [AuthService],
 })
 export class AuthModule {}

@@ -5,7 +5,7 @@ import { CurrentUser } from "@/auth/decorators/current-user.decorator";
 import { JwtAuthGuard } from "@/auth/guards/jwt-auth.guard";
 import { ResponseTransformInterceptor } from "@/common/interceptors/response-transform.interceptor";
 
-import { RegisterUserDto, TokenizedUser, UserResponse } from "./users.dtos";
+import { RegisterUserDto, TokenizedUser } from "./users.dtos";
 import { UsersSerializer, UsersProfileSerializer } from "./users.serializer";
 import { UsersService } from "./users.service";
 
@@ -25,16 +25,16 @@ export class UsersController {
   }
 
   @Get("profile/:id")
-  async profile(@Param() params: { id: string }): Promise<UserResponse> {
+  async profile(@Param() params: { id: string }) {
     const userId = parseInt(params.id);
     const profileData = await this.usersService.findByIdOrThrow(userId);
     return this.usersSerializer.serialize(profileData);
   }
 
   @Post()
-  async createUser(@Body() registerUserDto: RegisterUserDto): Promise<UserResponse> {
-    const newUser = await this.usersService.createOne(registerUserDto);
-    return this.usersSerializer.serialize(newUser);
+  async createUser(@Body() registerUserDto: RegisterUserDto) {
+    const data = await this.usersService.createOne(registerUserDto);
+    return data;
   }
 
   @Get("/student/:id")

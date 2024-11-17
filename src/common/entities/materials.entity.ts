@@ -1,4 +1,12 @@
-import { Entity, Property, ManyToOne, OneToMany, Collection, Index } from "@mikro-orm/core";
+import {
+  Entity,
+  Property,
+  ManyToOne,
+  OneToMany,
+  Collection,
+  Index,
+  Cascade,
+} from "@mikro-orm/core";
 
 import { MaterialsEnum } from "../enums/materials.enum";
 import { AssignmentSubmission } from "./assignment-submission.entity";
@@ -31,6 +39,7 @@ export class Materials extends Details {
 
   @OneToMany(() => AssignmentSubmission, (submission) => submission.materials, {
     mappedBy: "materials",
+    cascade: [Cascade.REMOVE],
   })
   submissions = new Collection<AssignmentSubmission>(this);
 

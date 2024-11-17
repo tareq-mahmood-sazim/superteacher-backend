@@ -174,4 +174,11 @@ export class ClassroomRepository {
     await this.em.persistAndFlush(classroom);
     return classroom;
   }
+
+  async isParticipant(studentId: number, classroomId: number): Promise<boolean> {
+    const classroom = await this.em.findOne(Classroom, classroomId, { populate: ["participants"] });
+    if (!classroom) return false;
+    const data = classroom.participants.find((student) => student.id === studentId);
+    return !!data;
+  }
 }

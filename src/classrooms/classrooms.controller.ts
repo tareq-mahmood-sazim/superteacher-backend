@@ -42,6 +42,12 @@ export class ClassroomsController {
     return this.classroomsService.findOne(+id);
   }
   @UseGuards(JwtAuthGuard)
+  @Get("/isParticipant/:id")
+  IsParticipant(@Req() req: { user: TokenizedUser }, @Param("id") id: string) {
+    const userId = req.user.id;
+    return this.classroomsService.isParticipant(userId, parseInt(id));
+  }
+  @UseGuards(JwtAuthGuard)
   @Get("participants/:id")
   GetParticipantsByTeacherId(@Req() req: { user: TokenizedUser }, @Param("id") id: string) {
     const teacherId = req.user.id;

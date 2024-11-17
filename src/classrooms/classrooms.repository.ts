@@ -93,7 +93,7 @@ export class ClassroomRepository {
         if (!student) throw new Error(`Student with ID ${studentId} not found`);
 
         classroom.participants.add(student);
-        this.mailerAppService.SendMail({
+        this.mailerAppService.sendMail({
           email: student.user.email,
           subject: "You have been added to a classroom",
           message: `You have been added to the classroom ${classroom.title} by ${classroom.teacher.firstName} ${classroom.teacher.lastName}`,

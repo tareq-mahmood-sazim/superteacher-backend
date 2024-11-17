@@ -6,12 +6,16 @@ import { Classroom } from "@/common/entities/classroom.entity";
 import { MaterialsEnum } from "@/common/enums/materials.enum";
 
 import { Materials } from "../common/entities/materials.entity";
+import { MailerAppService } from "../mailer-app/mailer-app.service";
 import { CreateMaterialDto } from "./dto/create-material.dto";
 import { UpdateMaterialDto } from "./dto/update-material.dto";
 
 @Injectable()
 export class MaterialsRepository {
-  constructor(private readonly em: EntityManager) {}
+  constructor(
+    private readonly em: EntityManager,
+    private readonly mailerAppService: MailerAppService,
+  ) {}
 
   findAllMaterials(classroomId: number): Promise<Materials[]> {
     return this.em.find(
@@ -55,6 +59,12 @@ export class MaterialsRepository {
     newAssignment.attachments = assignment.attachments ?? [];
     newAssignment.classroom = classroomId;
     await this.em.persistAndFlush(newAssignment);
+    await this.mailerAppService.sendMailToParticipants(assignment.classroom, {
+      subject: "A new material",
+      message: `A new assignment on ${newAssignment.title} has been added, due date ${new Date(
+        newAssignment.dueDate,
+      )}`,
+    });
     return newAssignment;
   }
   async createMaterials(materials: CreateMaterialDto) {
@@ -71,6 +81,12 @@ export class MaterialsRepository {
     newMaterials.attachments = materials.attachments ?? [];
     newMaterials.classroom = classroomId;
     await this.em.persistAndFlush(newMaterials);
+    await this.mailerAppService.sendMailToParticipants(materials.classroom, {
+      subject: "A new material",
+      message: `A new material on ${newMaterials.title} has been added, due date ${new Date(
+        newMaterials.dueDate,
+      )}`,
+    });
     return newMaterials;
   }
   async createExams(exams: CreateMaterialDto) {
@@ -89,6 +105,12 @@ export class MaterialsRepository {
     newExams.attachments = exams.attachments ?? [];
     newExams.classroom = classroomId;
     await this.em.persistAndFlush(newExams);
+    await this.mailerAppService.sendMailToParticipants(exams.classroom, {
+      subject: "A new material",
+      message: `A new assignment on ${newExams.title} has been added, due date ${new Date(
+        newExams.dueDate,
+      )}`,
+    });
     return newExams;
   }
 

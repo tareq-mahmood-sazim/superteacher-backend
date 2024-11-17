@@ -3,6 +3,7 @@ import { ForbiddenException, Injectable } from "@nestjs/common";
 import { EntityManager } from "@mikro-orm/postgresql";
 
 import dayjs from "dayjs";
+
 import { Classroom } from "@/common/entities/classroom.entity";
 import { UserProfile } from "@/common/entities/user-profiles.entity";
 import { EUserRole } from "@/common/enums/roles.enums";
@@ -28,12 +29,9 @@ export class ClassroomRepository {
     }
 
     const [hours, minutes] = classTime.split(":");
-    const timeAsDate = dayjs()
-      .set("hour", Number(hours))
-      .set("minute", Number(minutes))
-      .second(0)
-      .millisecond(0)
-      .toDate();
+
+    const timeAsDate = new Date();
+    timeAsDate.setHours(Number(hours), Number(minutes), 0, 0);
 
     const classroom = new Classroom();
     classroom.title = title;
@@ -47,14 +45,96 @@ export class ClassroomRepository {
   }
 
   async getClassroomByTeacherId(id: number) {
-    const classroomByTeacherId = await this.em.find(Classroom, {
-      teacher: id,
-    });
+    const classroomByTeacherId = await this.em.find(
+      Classroom,
+      {
+        teacher: id,
+      },
+      { populate: ["participants"] },
+    );
     return classroomByTeacherId;
+  }
+  async getClassroomParticipantsByTeacherId(id: number, classroomId: number) {
+    const classroomByTeacherId = await this.em.find(
+      Classroom,
+      {
+        teacher: id,
+        id: classroomId,
+      },
+      { populate: ["participants"] },
+    );
+    const getParticipants = classroomByTeacherId;
+    return getParticipants;
+  }
+
+  async addStudentInClassroom(studentIds: number[], classroomId: number, teacherId: number) {
+    const classroom = await this.em.findOne(Classroom, {
+      id: classroomId,
+      teacher: teacherId,
+    });
+    if (!classroom) return { message: "Classroom not found" };
+
+    await this.em.begin();
+
+    try {
+      for (const studentId of studentIds) {
+        const student = await this.em.findOne(UserProfile, {
+          id: studentId,
+        });
+
+        if (!student) throw new Error(`Student with ID ${studentId} not found`);
+
+        classroom.participants.add(student);
+      }
+
+      await this.em.persistAndFlush(classroom);
+      await this.em.commit();
+
+      return { message: "Students added successfully", classroom };
+    } catch (err: unknown) {
+      await this.em.rollback();
+      const error = err as { code?: string; message: string };
+      if (error.code === "23505") {
+        return { message: "One or more students are already added to this classroom." };
+      }
+      throw error;
+    }
+  }
+
+  async removeStudentFromClassroom(studentId: number, classroomId: number, teacherId: number) {
+    const classroom = await this.em.findOne(
+      Classroom,
+      {
+        id: classroomId,
+        teacher: teacherId,
+      },
+      { populate: ["participants"] },
+    );
+    if (!classroom) return { message: "Classroom not found" };
+
+    const student = await this.em.findOne(UserProfile, {
+      id: studentId,
+      role: { name: EUserRole.STUDENT },
+    });
+    if (!student) return { message: "Student not found" };
+    if (!classroom.participants.contains(student)) {
+      return { message: "Student is not a participant in this classroom" };
+    }
+    classroom.participants.remove(student);
+    try {
+      const participantsDetail = await this.em.persistAndFlush(classroom);
+      return participantsDetail;
+    } catch (err: unknown) {
+      const error = err as { code: string; message: string };
+      if (error.code === "23505") {
+        return { message: error.message };
+      }
+      throw error;
+    }
   }
 
   async getClassroomById(id: number) {
-    const classRoom = await this.em.findOne(Classroom, id);
+    const classRoom = await this.em.findOne(Classroom, id, { populate: ["participants"] });
     return classRoom;
   }
 

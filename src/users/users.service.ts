@@ -100,4 +100,27 @@ export class UsersService {
       return newUser;
     }
   }
+
+  getTeacherById(id: number) {
+    const teacher = this.usersRepository.getOneTeacherById(id);
+    return teacher;
+  }
+
+  getStudentById(id: number) {
+    const student = this.usersRepository.getOneStudentById(id);
+    return student;
+  }
+
+  getStudentsByName(params: string) {
+    const students = this.usersRepository.getOneStudentByFirstOrLastName(params);
+    return students;
+  }
+  getStudentsByEmail(email: string) {
+    const students = this.usersRepository.getOneStudentByEmail(email);
+    return students;
+  }
+  getOneTeacherById(id: number) {
+    const teacher = this.usersRepository.getOneTeacherById(id);
+    return teacher;
+  }
 }

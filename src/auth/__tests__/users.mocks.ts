@@ -10,3 +10,4 @@ export const MOCK_USER = new User(
 
 export const MOCK_USER_ROLE = new Role(EUserRole.STUDENT);
 MOCK_USER_ROLE.id = 1;
+

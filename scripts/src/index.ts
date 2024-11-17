@@ -1,7 +1,7 @@
 import postgres from "postgres";
 import * as readline from "readline";
 
-const sql = postgres(process.env.DATABASE_URL as string ?? "");
+const sql = postgres((process.env.DATABASE_URL as string) ?? "");
 
 function random_alphaneumeric_string_generator(length: number = 8) {
   let result = "";

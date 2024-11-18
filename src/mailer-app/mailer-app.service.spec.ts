@@ -35,7 +35,7 @@ describe("MailerAppService", () => {
 
     const mockSend = jest.spyOn(sendGrid, "send");
 
-    const result = await service.SendMail(sendMailDto);
+    const result = await service.sendMail(sendMailDto);
 
     expect(mockSend).toHaveBeenCalledWith({
       to: "test@example.com",
@@ -55,7 +55,7 @@ describe("MailerAppService", () => {
       message: "Test Message",
     };
 
-    const result = await service.SendMail(sendMailDto);
+    const result = await service.sendMail(sendMailDto);
 
     expect(result).toEqual({ message: "Email sent to test@example.com", status: 503 });
   });
@@ -72,7 +72,7 @@ describe("MailerAppService", () => {
     const mockError = new Error("SendGrid API error");
     jest.spyOn(sendGrid, "send").mockRejectedValueOnce(mockError);
 
-    const result = await service.SendMail(sendMailDto);
+    const result = await service.sendMail(sendMailDto);
 
     expect(result).toEqual({ error: "Failed to send email: SendGrid API error" });
   });

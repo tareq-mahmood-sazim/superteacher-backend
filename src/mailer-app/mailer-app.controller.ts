@@ -11,7 +11,7 @@ export class MailerAppController {
   // currently active for testing purpose
   @Post()
   sendMail(@Body() createMailerAppDto: SendMailerAppDto) {
-    return this.mailerAppService.SendMail(createMailerAppDto);
+    return this.mailerAppService.sendMail(createMailerAppDto);
   }
   @Get()
   health() {

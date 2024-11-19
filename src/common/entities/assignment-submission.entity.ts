@@ -1,26 +1,19 @@
-import { Entity, PrimaryKey, Property, ManyToOne } from "@mikro-orm/core";
+import { Entity, Property, ManyToOne } from "@mikro-orm/core";
 
-import { v4 } from "uuid";
-
-import { Assignment } from "./assignment.entity";
-import { Attachment } from "./attachment.entity";
+import { Details } from "./details.entity";
+import { Materials } from "./materials.entity";
 import { UserProfile } from "./user-profiles.entity";
 
-@Entity({
-  tableName: "assignmentSubmission",
-})
-export class AssignmentSubmission {
-  @PrimaryKey({ type: "uuid" })
-  id: string = v4();
-
+@Entity({ tableName: "assignmentSubmission" })
+export class AssignmentSubmission extends Details {
   @ManyToOne(() => UserProfile)
   userProfile!: UserProfile;
 
-  @ManyToOne(() => Attachment)
-  attachment!: Attachment;
+  @Property()
+  attachment!: string[];
 
-  @ManyToOne(() => Assignment)
-  assignment!: Assignment;
+  @ManyToOne(() => Materials, { inversedBy: "submissions" })
+  materials!: Materials;
 
   @Property()
   submittedAt: Date = new Date();

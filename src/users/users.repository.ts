@@ -4,6 +4,7 @@ import { EntityRepository, wrap } from "@mikro-orm/postgresql";
 
 import { Role } from "@/common/entities/roles.entity";
 import { UserProfile } from "@/common/entities/user-profiles.entity";
+import { Degree } from "@/common/enums/main.enum";
 import { EUserRole } from "@/common/enums/roles.enums";
 
 import { User } from "../common/entities/users.entity";
@@ -40,7 +41,7 @@ export class UsersRepository extends EntityRepository<User> {
       highestEducationLevel: highestEducationLevel ?? null,
       subjectsToTeach: subjectsToTeach ?? null,
       classLevel: classLevel ?? null,
-      degree: degree ?? null,
+      degree: degree ?? Degree.NONE,
       semesterOrYear: semesterOrYear ?? null,
     });
     user.userProfile = userProfile;

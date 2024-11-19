@@ -16,9 +16,9 @@ import { Gender, Degree, EducationLevel, Medium } from "@/common/enums/main.enum
 import { UserProfilesRepository } from "@/user-profiles/user-profiles.repository";
 
 import { AssignmentSubmission } from "./assignment-submission.entity";
-import { Assignment } from "./assignment.entity";
 import { Classroom } from "./classroom.entity";
 import { CustomBaseEntity } from "./custom-base.entity";
+import { Materials } from "./materials.entity";
 import { Message } from "./message.entity";
 import { Role } from "./roles.entity";
 import { User } from "./users.entity";
@@ -92,6 +92,6 @@ export class UserProfile extends CustomBaseEntity {
   @OneToMany(() => AssignmentSubmission, (submission) => submission.userProfile)
   submissions = new Collection<AssignmentSubmission>(this);
 
-  @OneToMany(() => Assignment, (assignment) => assignment.userProfile)
-  assignments = new Collection<Assignment>(this);
+  @OneToMany(() => Materials, (materials) => materials.userProfile)
+  materials = new Collection<Materials>(this);
 }

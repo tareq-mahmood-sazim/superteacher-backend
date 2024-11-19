@@ -5,13 +5,17 @@ import { EntityManager } from "@mikro-orm/postgresql";
 import { Classroom } from "@/common/entities/classroom.entity";
 import { UserProfile } from "@/common/entities/user-profiles.entity";
 import { EUserRole } from "@/common/enums/roles.enums";
+import { MailerAppService } from "@/mailer-app/mailer-app.service";
 
 import { AddMeetLinkDto } from "./dto/add-meetLink.dto";
 import { CreateClassroomDto } from "./dto/create-classroom.dto";
 
 @Injectable()
 export class ClassroomRepository {
-  constructor(private readonly em: EntityManager) {}
+  constructor(
+    private readonly em: EntityManager,
+    private readonly mailerAppService: MailerAppService,
+  ) {}
 
   async createClassroom(
     createClassroomDto: CreateClassroomDto,
@@ -76,13 +80,24 @@ export class ClassroomRepository {
 
     try {
       for (const studentId of studentIds) {
-        const student = await this.em.findOne(UserProfile, {
-          id: studentId,
-        });
+        const student = await this.em.findOne(
+          UserProfile,
+          {
+            id: studentId,
+          },
+          {
+            populate: ["role", "user"],
+          },
+        );
 
         if (!student) throw new Error(`Student with ID ${studentId} not found`);
 
         classroom.participants.add(student);
+        this.mailerAppService.SendMail({
+          email: student.user.email,
+          subject: "You have been added to a classroom",
+          message: `You have been added to the classroom ${classroom.title} by ${classroom.teacher.firstName} ${classroom.teacher.lastName}`,
+        });
       }
 
       await this.em.persistAndFlush(classroom);

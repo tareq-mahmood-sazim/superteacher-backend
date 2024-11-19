@@ -1,21 +1,31 @@
-import { UnauthorizedException } from "@nestjs/common";
+import { UnauthorizedException } from "@nestjs/common"; // Import Logger
 import { JwtService } from "@nestjs/jwt";
-import { MessageBody, SubscribeMessage, WebSocketGateway } from "@nestjs/websockets";
+import {
+  ConnectedSocket,
+  MessageBody,
+  SubscribeMessage,
+  WebSocketGateway,
+} from "@nestjs/websockets";
 
 import { getCorsConfig } from "@/common/config/cors.config";
 import extractBearerAuthTokenFromHeaders from "@/common/middleware/bearer-token-validator.middleware";
 import { AbstractWebsocketGateway } from "@/common/websockets/abstract-websocket.gateway";
 import { TSocket } from "@/common/websockets/abstract-websocket.types";
 
+import { CreateMessageDto } from "./dto/create-message.dto";
 import { EGatewayIncomingEvent, EGatewayOutgoingEvent } from "./websocket-example.enum";
+import { MessagesRepository } from "./websocket-example.repository";
 
 @WebSocketGateway(Number(process.env.BE_WS_PORT), {
   cors: getCorsConfig(),
-  path: "/ws-example",
+  path: "/",
   transports: ["websocket"],
 })
 export class WebsocketExampleGateway extends AbstractWebsocketGateway {
-  constructor(private readonly jwtService: JwtService) {
+  constructor(
+    private readonly jwtService: JwtService,
+    private readonly messagesRepository: MessagesRepository,
+  ) {
     super();
   }
 
@@ -59,7 +69,9 @@ export class WebsocketExampleGateway extends AbstractWebsocketGateway {
   }
 
   @SubscribeMessage(EGatewayIncomingEvent.PING)
-  handlePing(@MessageBody() payload: string): void {
-    this.emitPayloadForEvent(EGatewayOutgoingEvent.PONG, payload);
+  handlePing(@MessageBody() payload: CreateMessageDto, @ConnectedSocket() socket: TSocket): void {
+    const parsedPayload = { ...payload, sender: socket.userId as number };
+    this.messagesRepository.createMessage(parsedPayload);
+    this.emitPayloadForEvent(EGatewayOutgoingEvent.PONG, parsedPayload);
   }
 }

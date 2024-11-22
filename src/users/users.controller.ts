@@ -40,6 +40,14 @@ export class UsersController {
     return this.usersSerializer.serialize(profileData);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Get("profile/:id")
+  async profile(@Param() params: { id: string }): Promise<UserResponse> {
+    const userId = parseInt(params.id);
+    const profileData = await this.usersService.findByIdOrThrow(userId);
+    return this.usersSerializer.serialize(profileData);
+  }
+
   @Post()
   async createUser(@Body() registerUserDto: RegisterUserDto): Promise<UserResponse> {
     const newUser = await this.usersService.createOne(registerUserDto);

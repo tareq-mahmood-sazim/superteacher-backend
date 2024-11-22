@@ -1,5 +1,4 @@
 import { Role } from "@/common/entities/roles.entity";
-
 import { User } from "@/common/entities/users.entity";
 import { EUserRole } from "@/common/enums/roles.enums";
 
@@ -10,4 +9,3 @@ export const MOCK_USER = new User(
 
 export const MOCK_USER_ROLE = new Role(EUserRole.STUDENT);
 MOCK_USER_ROLE.id = 1;
-

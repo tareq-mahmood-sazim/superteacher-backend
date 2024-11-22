@@ -5,6 +5,7 @@ import { TokenizedUser } from "@/users/users.dtos";
 
 import { ClassroomsService } from "./classrooms.service";
 import { AddMeetLinkDto } from "./dto/add-meetLink.dto";
+
 import { AddParticipantDto } from "./dto/add-participant.dto";
 import { CreateClassroomDto } from "./dto/create-classroom.dto";
 import { RemoveParticipantDto } from "./dto/remove-participant.dto";
@@ -20,6 +21,7 @@ export class ClassroomsController {
     const teacherId = req.user.id;
     return this.classroomsService.create(createClassroomDto, teacherId);
   }
+
   @UseGuards(JwtAuthGuard)
   @Post("/addParticipant")
   addStudentInClassroom(
@@ -41,6 +43,7 @@ export class ClassroomsController {
   findOne(@Param("id") id: string) {
     return this.classroomsService.findOne(+id);
   }
+
   @UseGuards(JwtAuthGuard)
   @Get("participants/:id")
   GetParticipantsByTeacherId(@Req() req: { user: TokenizedUser }, @Param("id") id: string) {
@@ -49,7 +52,8 @@ export class ClassroomsController {
   }
   @UseGuards(JwtAuthGuard)
   @Post("participants/remove")
-  RemoveParticipant(
+
+  removeParticipant(
     @Req() req: { user: TokenizedUser },
     @Body() removeParticipantDto: RemoveParticipantDto,
   ) {

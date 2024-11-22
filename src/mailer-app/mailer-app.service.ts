@@ -8,22 +8,22 @@ import { SendMailerAppDto } from "./dto/send-mailer-app.dto";
 export class MailerAppService {
   constructor() {}
 
-  async SendMail(createMailerAppDto: SendMailerAppDto) {
+  async sendMail(createMailerAppDto: SendMailerAppDto) {
     const { email, subject, message } = createMailerAppDto;
-    sendGrid.setApiKey((process.env.SENDGRID_API_KEY as string) ?? "");
+    sendGrid.setApiKey(process.env.SENDGRID_API_KEY ?? "");
     const msg = {
       to: email,
-      from: (process.env.SENDGRID_VERIFIED_SENDER as string) ?? "",
+      from: process.env.SENDGRID_VERIFIED_SENDER ?? "",
       subject,
       html: `<p>${message}</p>`,
     };
     try {
-      if ((process.env.NODE_ENV as string) === "PRODUCTION") {
+      if (process.env.NODE_ENV === "production") {
         await sendGrid.send(msg);
       }
       return {
         message: `Email sent to ${email}`,
-        status: (process.env.NODE_ENV as string) === "PRODUCTION" ? 200 : 503,
+        status: process.env.NODE_ENV === "production" ? 200 : 503,
       };
     } catch (error: unknown) {
       const errorMessage = error as { status: number; message: string };

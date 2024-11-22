@@ -1,6 +1,5 @@
 import { Injectable } from "@nestjs/common";
 
-
 import { EntityManager } from "@mikro-orm/postgresql";
 
 import sendGrid from "@sendgrid/mail";

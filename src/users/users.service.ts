@@ -26,7 +26,7 @@ export class UsersService {
 
   async findByIdOrThrow(id: number) {
     const user = await this.usersRepository.findOneOrFail(id, {
-      populate: ["userProfile", "userProfile.role"],
+      populate: ["userProfile", "userProfile.role", "userProfile.classrooms"],
     });
     return user;
   }

@@ -40,7 +40,6 @@ export class UsersController {
     return this.usersSerializer.serialize(profileData);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get("profile/:id")
   async profile(@Param() params: { id: string }): Promise<UserResponse> {
     const userId = parseInt(params.id);

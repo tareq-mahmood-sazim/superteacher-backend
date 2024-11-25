@@ -72,7 +72,7 @@ export class UsersRepository extends EntityRepository<User> {
         role: { name: EUserRole.STUDENT },
       },
       {
-        populate: ["user", "classLevel"],
+        populate: ["user", "classLevel", "classrooms"],
       },
     );
     return studentProfile;

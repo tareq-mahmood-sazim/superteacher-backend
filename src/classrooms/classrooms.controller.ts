@@ -4,6 +4,7 @@ import { JwtAuthGuard } from "@/auth/guards/jwt-auth.guard";
 import { TokenizedUser } from "@/users/users.dtos";
 
 import { ClassroomsService } from "./classrooms.service";
+import { AddMeetLinkDto } from "./dto/add-meetLink.dto";
 
 import { AddParticipantDto } from "./dto/add-participant.dto";
 import { CreateClassroomDto } from "./dto/create-classroom.dto";
@@ -64,7 +65,13 @@ export class ClassroomsController {
   update(@Param("id") id: string, @Body() updateClassroomDto: UpdateClassroomDto) {
     return this.classroomsService.update(+id, updateClassroomDto);
   }
+  @UseGuards(JwtAuthGuard)
+  @Post("addMeetLink/")
+  addMeetLink(@Body() addMeetLinkDto: AddMeetLinkDto) {
+    return this.classroomsService.addMeetLink(addMeetLinkDto);
+  }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(":id")
   remove(@Param("id") id: string) {
     return this.classroomsService.remove(+id);
